@@ -1,0 +1,37 @@
+## Technologies Identified
+
+### Front-End Technologies
+
+* Bootstrap 4.6 
+* HTML (implied via forms, UI components, structure) 
+* CSS (via Bootstrap CSS components) 
+* JavaScript (via Bootstrap JS components) 
+* jQuery 
+* Font Awesome (icon library) 
+
+### Back-End Technologies
+
+* PHP 
+* MySQL 
+
+### Development Tools & Environment
+
+* Git 
+* Node.js 
+* NPM (Node Package Manager) 
+* VS Code 
+* XAMPP (local server stack) 
+* NGrok 
+
+### Web & Architecture Concepts (Tech-Level)
+
+* HTTP (Hypertext Transfer Protocol) 
+* Request/Response Cycle 
+* MVC (Model View Controller) 
+* CRUD Operations 
+
+### Security & Data Handling
+
+* SQL Injection Prevention 
+* Authentication (Login/Logout systems) 
+* Cookies & Sessions 

@@ -1,64 +1,108 @@
 <?php
 // view/layout/sidebar.php
-$current_page = isset($current_page) ? $current_page : 'dashboard';
+$current_page = $current_page ?? 'dashboard';
+$B = BASE_URL;
+
+$monitoring_pages  = ['academic-monitoring','student-information','student-add','student-edit','student-view',
+                       'attendance-tracking','attendance-add','academic-performance','course-management',
+                       'examination-management','exam-add','fee-financial','fee-add',
+                       'communication','library-management','library-add','parent-portal','analytics'];
+$institutes_pages  = ['institutes','institute-add','institute-edit','institute-types','institute-type-add',
+                       'departments','department-add','department-edit','branches','branch-add','branch-edit'];
+$programs_pages    = ['academic-programs','program-add','program-edit','batch-management','batch-add',
+                       'batch-edit','subjects','subject-add','subject-edit','class-scheduling'];
+$faculty_pages     = ['faculty','staff-add','staff-edit','staff-view','staff-categories','staff-designations','staff-allocations'];
+
+function isActive(string $pg, string $current): string {
+    return $pg === $current ? 'active' : '';
+}
+function inPageGroup(array $pages, string $current): bool {
+    return in_array($current, $pages);
+}
 ?>
-<!-- Sidebar -->
-<div class="col-md-3 col-lg-2 px-0" style="background-color: #2c3e50; min-height: calc(100vh - 56px); transition: all 0.3s;">
-    <div class="d-flex flex-column p-3">
-        <!-- Toggle button -->
-        <button class="btn btn-sm mb-3" style="background-color: #b8a99a; color: #2c3e50;" onclick="toggleSidebar()">
-            <i class="bi bi-layout-sidebar-inset"></i> Toggle Sidebar
-        </button>
-        <div class="sidebar-content">
-            <?php if ($current_page == 'academic-monitoring'): ?>
-                <h6 class="text-white-50 small text-uppercase fw-bold mb-3">Academic Monitoring</h6>
-                <ul class="nav nav-pills flex-column gap-2">
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-person me-2"></i> Student Information (SIM)</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-calendar-check me-2"></i> Attendance Tracking</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-bar-chart me-2"></i> Academic Performance</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-book me-2"></i> Course Management</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-pencil-square me-2"></i> Examination Management</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-cash me-2"></i> Fee & Financial</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-chat me-2"></i> Communication</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-journal me-2"></i> Library Management</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-people me-2"></i> Parent Portal</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-graph-up me-2"></i> Analytics</a></li>
+<!-- ── SIDEBAR ── -->
+<nav id="sidebar">
+    <div class="sidebar-inner">
+
+        <div class="d-none d-md-flex align-items-center mb-2" style="padding: 0 15px;">
+            <button id="sidebar-toggle-btn" title="Toggle Sidebar">
+                <i class="bi bi-layout-sidebar-inset"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-nav-scroll">
+            <!-- Dashboard -->
+            <ul class="sidebar-nav mt-2">
+                <li class="<?php echo isActive('dashboard', $current_page); ?>">
+                    <a href="<?php echo $B; ?>/index.php?page=dashboard">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+            </ul>
+
+            <?php 
+            $role = $_SESSION['user_role'] ?? 'faculty';
+            if (inPageGroup($monitoring_pages, $current_page)): 
+            ?>
+                <!-- Academic Monitoring Group -->
+                <div class="sidebar-section">Academic</div>
+                <ul class="sidebar-nav">
+                    <li class="<?php echo isActive('student-information', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=student-information"><i class="bi bi-person-lines-fill"></i> Students (SIM)</a></li>
+                    <li class="<?php echo isActive('attendance-tracking', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=attendance-tracking"><i class="bi bi-calendar-check"></i> Attendance</a></li>
+                    <li class="<?php echo isActive('academic-performance', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=academic-performance"><i class="bi bi-bar-chart-line"></i> Performance</a></li>
+                    <li class="<?php echo isActive('course-management', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=course-management"><i class="bi bi-book"></i> Courses</a></li>
+                    <li class="<?php echo isActive('examination-management', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=examination-management"><i class="bi bi-pencil-square"></i> Examinations</a></li>
+                    <li class="<?php echo isActive('fee-financial', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=fee-financial"><i class="bi bi-cash-stack"></i> Fee & Financial</a></li>
+                    <li class="<?php echo isActive('communication', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=communication"><i class="bi bi-chat-dots"></i> Communication</a></li>
+                    <li class="<?php echo isActive('library-management', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=library-management"><i class="bi bi-journal-bookmark"></i> Library</a></li>
+                    <li class="<?php echo isActive('parent-portal', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=parent-portal"><i class="bi bi-people"></i> Parent Portal</a></li>
+                    <li class="<?php echo isActive('analytics', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=analytics"><i class="bi bi-graph-up-arrow"></i> Analytics</a></li>
                 </ul>
-            <?php elseif ($current_page == 'institutes'): ?>
-                <h6 class="text-white-50 small text-uppercase fw-bold mb-3">Institutes</h6>
-                <ul class="nav nav-pills flex-column gap-2">
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-building me-2"></i> Manage Institutes</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-plus-circle me-2"></i> Add Institute</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-tag me-2"></i> Institute Types</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-diagram-3 me-2"></i> Departments</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-code-square me-2"></i> Branches</a></li>
+            <?php endif; ?>
+
+            <?php if ($role === 'admin' && inPageGroup($institutes_pages, $current_page)): ?>
+                <div class="sidebar-section">Institution</div>
+                <ul class="sidebar-nav">
+                    <li class="<?php echo isActive('institutes', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=institutes"><i class="bi bi-building"></i> Institutes</a></li>
+                    <li class="<?php echo isActive('institute-types', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=institute-types"><i class="bi bi-tags"></i> Institute Types</a></li>
+                    <li class="<?php echo isActive('departments', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=departments"><i class="bi bi-diagram-3"></i> Departments</a></li>
+                    <li class="<?php echo isActive('branches', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=branches"><i class="bi bi-sign-merge-left"></i> Branches</a></li>
                 </ul>
-            <?php elseif ($current_page == 'academic-programs'): ?>
-                <h6 class="text-white-50 small text-uppercase fw-bold mb-3">Academic Programs</h6>
-                <ul class="nav nav-pills flex-column gap-2">
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-mortarboard me-2"></i> Programs & Courses</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-grid me-2"></i> Batch Management</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-journal-text me-2"></i> Subjects</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-calendar-week me-2"></i> Class Scheduling</a></li>
+            <?php endif; ?>
+
+            <?php if (($role === 'admin' || $role === 'faculty') && inPageGroup($programs_pages, $current_page)): ?>
+                <div class="sidebar-section">Programs</div>
+                <ul class="sidebar-nav">
+                    <li class="<?php echo isActive('academic-programs', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=academic-programs"><i class="bi bi-mortarboard"></i> Programs</a></li>
+                    <li class="<?php echo isActive('batch-management', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=batch-management"><i class="bi bi-grid-3x3-gap"></i> Batches</a></li>
+                    <li class="<?php echo isActive('subjects', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=subjects"><i class="bi bi-journal-text"></i> Subjects</a></li>
+                    <li class="<?php echo isActive('class-scheduling', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=class-scheduling"><i class="bi bi-calendar-week"></i> Scheduling</a></li>
                 </ul>
-            <?php else: ?>
-                <h6 class="text-white-50 small text-uppercase fw-bold mb-3">Main Menu</h6>
-                <ul class="nav nav-pills flex-column gap-2">
-                    <li class="nav-item"><a href="<?php echo BASE_URL; ?>/index.php?page=dashboard" class="nav-link text-white"><i class="bi bi-speedometer2 me-2"></i> Dashboard Home</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-people me-2"></i> All Students</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-person-badge me-2"></i> Faculty List</a></li>
+            <?php endif; ?>
+
+            <?php if ($role === 'admin' && inPageGroup($faculty_pages, $current_page)): ?>
+                <div class="sidebar-section">Staff</div>
+                <ul class="sidebar-nav">
+                    <li class="<?php echo isActive('faculty', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=faculty"><i class="bi bi-person-badge"></i> All Staff</a></li>
+                    <li class="<?php echo isActive('staff-categories', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=staff-categories"><i class="bi bi-tag"></i> Categories</a></li>
+                    <li class="<?php echo isActive('staff-designations', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=staff-designations"><i class="bi bi-award"></i> Designations</a></li>
+                    <li class="<?php echo isActive('staff-allocations', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=staff-allocations"><i class="bi bi-shuffle"></i> Allocations</a></li>
                 </ul>
             <?php endif; ?>
         </div>
+
+        <!-- System group (Sticky Bottom) -->
+        <div class="sidebar-bottom-group">
+            <div class="sidebar-section">System</div>
+            <ul class="sidebar-nav">
+                <li class="<?php echo isActive('profile', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=profile"><i class="bi bi-person-circle"></i> My Profile</a></li>
+                <?php if ($role === 'admin'): ?>
+                <li class="<?php echo isActive('logs', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=logs"><i class="bi bi-shield-lock"></i> Audit Logs</a></li>
+                <li class="<?php echo isActive('settings', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=settings"><i class="bi bi-gear"></i> Settings</a></li>
+                <?php endif; ?>
+                <li><a href="<?php echo $B; ?>/controller/AuthController.php?action=logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+            </ul>
+        </div>
+
     </div>
-</div>
-<script>
-function toggleSidebar() {
-    var sidebar = document.querySelector('.sidebar-content');
-    if (sidebar.style.display === 'none') {
-        sidebar.style.display = 'block';
-    } else {
-        sidebar.style.display = 'none';
-    }
-}
-</script>
+</nav>

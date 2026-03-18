@@ -1,0 +1,12 @@
+## Module Names
+
+* Student Information Management (SIM) 
+* Attendance Tracking 
+* Academic Performance & Grading 
+* Course & Curriculum Management 
+* Examination Management 
+* Fee & Financial Management 
+* Communication & Notifications 
+* Library Management 
+* Parent & Guardian Portal 
+* Analytics & Reporting 
