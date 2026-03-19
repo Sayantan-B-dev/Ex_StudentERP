@@ -7,7 +7,7 @@ define('DB_PASS', '');
 define('DB_NAME', 'college_db');
 
 // Base URL (adjust if needed)
-define('BASE_URL', 'http://localhost/studentErpFin');
+define('BASE_URL', 'http://localhost/Ex_StudentERP');
 
 // Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
