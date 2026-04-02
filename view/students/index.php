@@ -70,7 +70,7 @@ $B = BASE_URL;
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h6 class="mb-0">Students <span class="badge bg-secondary"><?php echo count($students); ?></span></h6>
-        <input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Quick filter…" style="width:200px">
+        <div class="d-flex"><select id="tableFilter" class="form-select form-select-sm me-2" style="width:120px"><option value="">All</option><option value="active">Active</option><option value="inactive">Inactive</option><option value="graduated">Graduated</option><option value="suspended">Suspended</option></select><input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Quick filter…" style="width:200px"></div>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">

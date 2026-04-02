@@ -21,7 +21,7 @@ $fail = count($rows) - $pass;
     <div class="col-md-3"><div class="stat-card" style="background:var(--charcoal)"><div><h6>Avg %</h6><h2><?php echo number_format($avg,1); ?>%</h2></div><i class="bi bi-percent stat-icon"></i></div></div>
 </div>
 <?php endif; ?>
-<div class="card"><div class="card-header d-flex justify-content-between"><h6 class="mb-0">Grade Records</h6><input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search…" style="width:200px"></div>
+<div class="card"><div class="card-header d-flex justify-content-between"><h6 class="mb-0">Grade Records</h6><div class="d-flex"><select id="tableFilter" class="form-select form-select-sm me-2" style="width:120px"><option value="">All</option><option value="pass">Pass</option><option value="fail">Fail</option></select><input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search…" style="width:200px"></div></div>
 <div class="card-body p-0"><div class="table-responsive"><table class="table table-hover mb-0">
     <thead><tr><th>#</th><th>Adm.No</th><th>Student</th><th>Subject</th><th>Exam</th><th>Marks</th><th>%</th><th>Grade</th><th>Result</th></tr></thead>
     <tbody>
