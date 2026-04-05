@@ -15,6 +15,6 @@
 
 ---
 ## ✨ Phase 3: Final Polishing
-- [ ] **8. Shadow Styling**: Apply premium box-shadow to all new card components.
-- [ ] **9. Final Database Update**: Ensure `db.md` reflects all final schema changes.
-- [ ] **10. Version Control**: Commit as v1.7.
+- [x] **8. Shadow Styling**: Apply premium box-shadow to all new card components.
+- [x] **9. Final Database Update**: Ensure `db.md` reflects all final schema changes.
+- [x] **10. Version Control**: Commit as v1.7.
