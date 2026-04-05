@@ -2,6 +2,25 @@
 
 This document tracks major feature updates, database migrations, and UI/UX improvements made to the system.
 
+## April 5, 2026 – [v1.7.2] – Profile Expansion & Schema Fix
+Finalized the student profile revmap and resolved critical database join errors.
+
+### 🚀 New Features
+- **6-Tab Student Profile**: 
+    - **Personal, Contact, Guardian, Fees, Attendance, Results**.
+    - Integrated real-time tracking for academic performance and fee history.
+    - Added progress bars and summary indicators for student attendance.
+- **Enhanced Data Integrity**: Added null coalescing across the profile to prevent PHP warnings.
+
+### 🛠️ Database Updates
+- **students**: New columns for `roll`, `roll_extra`, `identification_mark_extra`, `father_occupation`, `mother_occupation`, and `parent_address`.
+- **student_grades**: Added `batch_id`, `academic_year`, `is_internal`, `is_practical`, `is_project`, and `is_semester`.
+
+### 🧹 Workspace Cleanup
+- Consolidated `todo.md`, `db.md`, `implementation_plan.md`, and `instructions.md` into a single, dynamic **`instruction.md`** file for streamlined future development.
+
+---
+
 ## April 5, 2026 – [v1.5] – Dynamic Scheduling & Academic Calendar
 Integrated a professional timetable management system with conflict detection and holiday syncing.
 

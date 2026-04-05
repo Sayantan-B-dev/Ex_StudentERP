@@ -1,4 +1,0 @@
-### note: .mark one job at a time when its done...also add a db.md in root(append each time...with version..assume the previous one is executed)..there put all the new queries or fake data i need to run in the xampp mysql db, after one task run `git add . && git commit -m "feat:....."` command
-
-## create or check a todo.md(if created just check and proceed) on the root make your own list with these:
-[ ] in academic perfomentce page "http://localhost/Ex_StudentERP/index.php?page=academic-performance" its showing "Fatal error: Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.roll' in 'field list' in C:\xampp\htdocs\Ex_StudentERP\view\performance\index.php:40 Stack trace: #0 C:\xampp\htdocs\Ex_StudentERP\view\performance\index.php(40): PDO->query('SELECT sg.*, CO...') #1 C:\xampp\htdocs\Ex_StudentERP\index.php(85): include('C:\\xampp\\htdocs...') #2 {main} thrown in C:\xampp\htdocs\Ex_StudentERP\view\performance\index.php on line 40"
