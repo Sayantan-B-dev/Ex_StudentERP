@@ -14,7 +14,6 @@
     - Internal/Semester: subjects, batch with year, full mark, student, received mark. Track by id/register number.
     - Project: name, batch year, branch name, instructor, students.
     - Practical: similar structure.
-- [ ] **6. Staff Management - Editability:** Make Staff Categories, Staff Designations, Staff Subject Allocations editable (currently right part is not editable, only delete/create).
 - [ ] **7. Faculty Management - Salary & Activities:** Add feature to track faculty salary and activities.
 - [ ] **8. Programs - Class Scheduling:** Make calendar editable, synced with IRL calendar. 
     - Admin can mark holidays.
