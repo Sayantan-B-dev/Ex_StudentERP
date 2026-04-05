@@ -12,7 +12,7 @@ if ($batch_id) {
     $stmt->execute([(int)$batch_id]);
     $students_for_batch = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['attendance'])) {
     $date       = $_POST['attendance_date'];
     $subject_id = $_POST['subject_id'] ?: null;
     $batch_id_s = (int)$_POST['batch_id'];
@@ -30,8 +30,7 @@ if ($batch_id) {
                 ->execute([(int)$student_id, $subject_id, $session_id, $batch_id_s, $date, $status, $remarks, $_SESSION['user_id']]);
         }
     }
-    logActivity($pdo, 'Mark Attendance', 'Attendance', "Marked attendance for batch ID: $batch_id_s on $date");
-    $_SESSION['flash'] = 'Attendance saved for '.count($_POST['attendance']).' students.';
+    $_SESSION['flash'] = 'Attendance saved successfully.';
     header('Location: '.BASE_URL.'/index.php?page=attendance-tracking'); exit;
 }
 $B = BASE_URL;

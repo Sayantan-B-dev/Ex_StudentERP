@@ -86,14 +86,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if ($daySchedules): ?>
                 <div class="d-flex flex-wrap gap-2">
                     <?php foreach ($daySchedules as $sc): ?>
-                    <div class="p-2 rounded border-start shadow-sm" style="background:#fff; border-left:4px solid var(--olive); min-width:180px">
-                        <div class="d-flex justify-content-between">
-                            <span class="badge bg-olive-light text-olive mb-1"><?php echo htmlspecialchars($sc['sub_code']); ?></span>
-                            <small class="text-muted"><i class="bi bi-clock me-1"></i><?php echo date('H:i', strtotime($sc['start_time'])); ?></small>
+                    <div class="px-3 py-2 rounded-pill border shadow-sm d-inline-flex align-items-center gap-3 mb-2 me-2" style="background:#fff; border-left:4px solid var(--olive) !important; min-width:220px; border-radius: 12px !important;">
+                        <div class="text-start">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge rounded-pill bg-olive-light text-olive" style="font-size: 0.65rem; border: 1px solid var(--olive)"><?php echo htmlspecialchars($sc['sub_code']); ?></span>
+                                <div class="fw-bold text-dark" style="font-size: 0.85rem;"><?php echo htmlspecialchars($sc['subject_name']); ?></div>
+                            </div>
+                            <div class="d-flex gap-3 mt-1" style="font-size:0.7rem; opacity: 0.8">
+                                <span><i class="bi bi-clock me-1"></i><?php echo date('H:i', strtotime($sc['start_time'])); ?> - <?php echo date('H:i', strtotime($sc['end_time'])); ?></span>
+                                <span><i class="bi bi-geo-alt me-1"></i>R:<?php echo htmlspecialchars($sc['room_number']??'—'); ?></span>
+                                <span><i class="bi bi-person me-1"></i><?php echo htmlspecialchars(explode(' ', $sc['faculty_name'])[0]??'—'); ?></span>
+                            </div>
                         </div>
-                        <div class="fw-bold small"><?php echo htmlspecialchars($sc['subject_name']); ?></div>
-                        <div class="small text-muted" style="font-size:0.75rem"><i class="bi bi-person me-1"></i><?php echo htmlspecialchars($sc['faculty_name']??'—'); ?></div>
-                        <div class="small text-muted" style="font-size:0.75rem"><i class="bi bi-geo-alt me-1"></i>Room <?php echo htmlspecialchars($sc['room_number']??'TBD'); ?></div>
                     </div>
                     <?php endforeach; ?>
                 </div>

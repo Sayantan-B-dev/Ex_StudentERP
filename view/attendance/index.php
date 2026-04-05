@@ -41,10 +41,10 @@ if (isset($_GET['download']) && $batch_filter) {
 </div>
 <!-- Stats -->
 <div class="row g-3 mb-4">
-    <div class="col-md-3"><div class="stat-card" style="background:var(--olive)"><div><h6 style="font-size:1.1rem; opacity:0.9">Total Records</h6><h2 style="font-size:2.5rem; font-weight:700"><?php echo $total; ?></h2><small>For selected filters</small></div><i class="bi bi-calendar-check-fill stat-icon"></i></div></div>
-    <div class="col-md-3"><div class="stat-card" style="background:#27ae60"><div><h6 style="font-size:1.1rem; opacity:0.9">Present</h6><h2 style="font-size:2.5rem; font-weight:700"><?php echo $present; ?></h2></div><i class="bi bi-check-circle-fill stat-icon"></i></div></div>
-    <div class="col-md-3"><div class="stat-card" style="background:var(--maroon)"><div><h6 style="font-size:1.1rem; opacity:0.9">Absent</h6><h2 style="font-size:2.5rem; font-weight:700"><?php echo $absent; ?></h2></div><i class="bi bi-x-circle-fill stat-icon"></i></div></div>
-    <div class="col-md-3"><div class="stat-card" style="background:#f39c12"><div><h6 style="font-size:1.1rem; opacity:0.9">Late</h6><h2 style="font-size:2.5rem; font-weight:700"><?php echo $late; ?></h2></div><i class="bi bi-clock-fill stat-icon"></i></div></div>
+    <div class="col-md-3"><div class="stat-card" style="background:var(--olive)"><div><h6>Total Records</h6><h2><?php echo $total; ?></h2></div><i class="bi bi-person-lines-fill stat-icon"></i></div></div>
+    <div class="col-md-3"><div class="stat-card" style="background:#27ae60"><div><h6>Present</h6><h2><?php echo $present; ?></h2></div><i class="bi bi-check-circle-fill stat-icon"></i></div></div>
+    <div class="col-md-3"><div class="stat-card" style="background:var(--maroon)"><div><h6>Absent</h6><h2><?php echo $absent; ?></h2></div><i class="bi bi-x-circle-fill stat-icon"></i></div></div>
+    <div class="col-md-3"><div class="stat-card" style="background:#f39c12"><div><h6>Late</h6><h2><?php echo $late; ?></h2></div><i class="bi bi-clock-fill stat-icon"></i></div></div>
 </div>
 <!-- Filters -->
 <div class="card mb-3"><div class="card-body py-3">

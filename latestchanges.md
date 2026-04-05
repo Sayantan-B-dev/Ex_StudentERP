@@ -21,6 +21,17 @@ Integrated a professional timetable management system with conflict detection an
 
 ---
 
+### [v1.6] - 2026-04-05
+- **UI/UX Refinement**:
+    -   Applied consistent **shadows** across all card elements for a more premium look.
+    -   Redesigned Class Schedule view with **"Bubble Style"** rounded cards for subjects.
+    -   Aligned Stat Card sizes in the Attendance Dashboard for consistent proportions.
+- **Bug Fixes**:
+    -   Resolved **PHP Parse Error** in `view/attendance/add.php` (unmatched closing brace in POST block).
+    -   Optimized Attendance stats icons and layout.
+
+---
+
 ## April 5, 2026 – [v1.4] – Staff Management Extensions (Activities & Salary)
 Added comprehensive tracking for faculty activities and historical salary disbursements.
 
