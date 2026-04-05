@@ -78,6 +78,7 @@ $badge = match($s['status']) { 'active'=>'badge-active','inactive'=>'badge-inact
                         <div class="col-6"><small class="text-muted">Religion</small><div class="fw-medium"><?php echo htmlspecialchars($s['religion'] ?: '—'); ?></div></div>
                         <div class="col-6"><small class="text-muted">Caste Category</small><div class="fw-medium"><?php echo htmlspecialchars($s['caste_category'] ?: '—'); ?></div></div>
                         <div class="col-6"><small class="text-muted">Aadhaar</small><div class="fw-medium"><?php echo htmlspecialchars($s['aadhaar_number'] ?: '—'); ?></div></div>
+                        <div class="col-12"><small class="text-muted">Identification Marks</small><div class="fw-medium">1. <?php echo htmlspecialchars($s['identification_mark'] ?: '—'); ?><br>2. <?php echo htmlspecialchars($s['identification_mark_extra'] ?: '—'); ?></div></div>
                     </div>
                 </div>
                 <!-- Contact -->
@@ -94,7 +95,18 @@ $badge = match($s['status']) { 'active'=>'badge-active','inactive'=>'badge-inact
                 <div class="tab-pane fade" id="guardian">
                     <div class="row g-2 mt-1">
                         <?php
-                        $fields_g = ["Father's Name"=>$s['father_name'],"Father's Phone"=>$s['father_phone'],"Mother's Name"=>$s['mother_name'],"Mother's Phone"=>$s['mother_phone'],'Guardian Name'=>$s['guardian_name'],'Relation'=>$s['guardian_relation'],'Guardian Phone'=>$s['guardian_phone']];
+                        $fields_g = [
+                            "Father's Name" => $s['father_name'],
+                            "Father's Phone" => $s['father_phone'],
+                            "Father's Occupation" => $s['father_occupation'],
+                            "Mother's Name" => $s['mother_name'],
+                            "Mother's Phone" => $s['mother_phone'],
+                            "Mother's Occupation" => $s['mother_occupation'],
+                            'Guardian Name' => $s['guardian_name'],
+                            'Relation' => $s['guardian_relation'],
+                            'Guardian Phone' => $s['guardian_phone'],
+                            'Parent Address' => $s['parent_address']
+                        ];
                         foreach ($fields_g as $lbl => $val): ?>
                         <div class="col-6"><small class="text-muted"><?php echo $lbl; ?></small><div class="fw-medium"><?php echo htmlspecialchars($val ?: '—'); ?></div></div>
                         <?php endforeach; ?>

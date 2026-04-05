@@ -9,7 +9,6 @@
     - Add downloadable report for a whole batch at once.
     - Fix display issue (not showing correctly date wise).
     - Fix "Total Records" text size (slightly bigger than others).
-- [ ] **5. Academic Performance / Results Module:** Show internal, project, practical, semester results of a batch.
     - Faculty can edit.
     - Internal/Semester: subjects, batch with year, full mark, student, received mark. Track by id/register number.
     - Project: name, batch year, branch name, instructor, students.

@@ -21,17 +21,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $adm_no = 'ADM'.$year.str_pad($count+1, 4, '0', STR_PAD_LEFT);
 
         $stmt = $pdo->prepare("INSERT INTO students (admission_number,registration_no,roll,roll_extra,first_name,middle_name,last_name,
-            date_of_birth,gender,blood_group,nationality,religion,caste_category,
+            date_of_birth,gender,blood_group,nationality,religion,caste_category,aadhaar_number,identification_mark,identification_mark_extra,
             personal_email,phone,alternate_phone,permanent_address,current_address,city,state,pincode,country,
             program_id,batch_id,admission_date,admission_type,admission_category,current_semester,
-            father_name,father_phone,father_email,mother_name,mother_phone,
-            guardian_name,guardian_relation,guardian_phone,status,created_by)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            father_name,father_phone,father_email,father_occupation,mother_name,mother_phone,mother_email,mother_occupation,
+            guardian_name,guardian_relation,guardian_phone,parent_address,status,created_by)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $stmt->execute([
             $adm_no, $_POST['registration_no'] ?? null, $_POST['roll'] ?? null, $_POST['roll_extra'] ?? null,
             $_POST['first_name'], $_POST['middle_name'] ?? '', $_POST['last_name'],
             $_POST['date_of_birth'], $_POST['gender'], $_POST['blood_group'] ?? null,
             $_POST['nationality'] ?? 'Indian', $_POST['religion'] ?? null, $_POST['caste_category'] ?? null,
+            $_POST['aadhaar_number'] ?? null, $_POST['identification_mark'] ?? null, $_POST['identification_mark_extra'] ?? null,
             $_POST['personal_email'] ?? null, $_POST['phone'] ?? null, $_POST['alternate_phone'] ?? null,
             $_POST['permanent_address'], $_POST['current_address'] ?? null,
             $_POST['city'] ?? null, $_POST['state'] ?? null, $_POST['pincode'] ?? null,
@@ -39,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['program_id'] ?: null, $_POST['batch_id'] ?: null,
             $_POST['admission_date'], $_POST['admission_type'] ?? 'regular',
             $_POST['admission_category'] ?? 'general', $_POST['current_semester'] ?? 1,
-            $_POST['father_name'] ?? null, $_POST['father_phone'] ?? null, $_POST['father_email'] ?? null,
-            $_POST['mother_name'] ?? null, $_POST['mother_phone'] ?? null,
-            $_POST['guardian_name'] ?? null, $_POST['guardian_relation'] ?? null, $_POST['guardian_phone'] ?? null,
+            $_POST['father_name'] ?? null, $_POST['father_phone'] ?? null, $_POST['father_email'] ?? null, $_POST['father_occupation'] ?? null,
+            $_POST['mother_name'] ?? null, $_POST['mother_phone'] ?? null, $_POST['mother_email'] ?? null, $_POST['mother_occupation'] ?? null,
+            $_POST['guardian_name'] ?? null, $_POST['guardian_relation'] ?? null, $_POST['guardian_phone'] ?? null, $_POST['parent_address'] ?? null,
             'active', $_SESSION['user_id']
         ]);
         logActivity($pdo, 'Add Student', 'Students', "Added student: $_POST[first_name] $_POST[last_name] ($adm_no)");
@@ -131,6 +132,22 @@ $B = BASE_URL;
                             <option value="<?php echo $c; ?>" <?php echo ($old['caste_category']??'')===$c?'selected':''; ?>><?php echo $c; ?></option>
                             <?php endforeach; ?>
                         </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Religion</label>
+                        <input type="text" name="religion" class="form-control" value="<?php echo htmlspecialchars($old['religion'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Aadhaar No.</label>
+                        <input type="text" name="aadhaar_number" class="form-control" value="<?php echo htmlspecialchars($old['aadhaar_number'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Identification Mark 1</label>
+                        <input type="text" name="identification_mark" class="form-control" value="<?php echo htmlspecialchars($old['identification_mark'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Identification Mark 2</label>
+                        <input type="text" name="identification_mark_extra" class="form-control" value="<?php echo htmlspecialchars($old['identification_mark_extra'] ?? ''); ?>">
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Personal Email</label>
@@ -243,11 +260,15 @@ $B = BASE_URL;
                     <div class="col-md-4"><label class="form-label">Father's Name</label><input type="text" name="father_name" class="form-control" value="<?php echo htmlspecialchars($old['father_name'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Father's Phone</label><input type="text" name="father_phone" class="form-control" value="<?php echo htmlspecialchars($old['father_phone'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Father's Email</label><input type="email" name="father_email" class="form-control" value="<?php echo htmlspecialchars($old['father_email'] ?? ''); ?>"></div>
+                    <div class="col-md-3"><label class="form-label">Father's Occupation</label><input type="text" name="father_occupation" class="form-control" value="<?php echo htmlspecialchars($old['father_occupation'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Mother's Name</label><input type="text" name="mother_name" class="form-control" value="<?php echo htmlspecialchars($old['mother_name'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Mother's Phone</label><input type="text" name="mother_phone" class="form-control" value="<?php echo htmlspecialchars($old['mother_phone'] ?? ''); ?>"></div>
+                    <div class="col-md-4"><label class="form-label">Mother's Email</label><input type="email" name="mother_email" class="form-control" value="<?php echo htmlspecialchars($old['mother_email'] ?? ''); ?>"></div>
+                    <div class="col-md-3"><label class="form-label">Mother's Occupation</label><input type="text" name="mother_occupation" class="form-control" value="<?php echo htmlspecialchars($old['mother_occupation'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Guardian Name</label><input type="text" name="guardian_name" class="form-control" value="<?php echo htmlspecialchars($old['guardian_name'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Relation</label><input type="text" name="guardian_relation" class="form-control" value="<?php echo htmlspecialchars($old['guardian_relation'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Guardian Phone</label><input type="text" name="guardian_phone" class="form-control" value="<?php echo htmlspecialchars($old['guardian_phone'] ?? ''); ?>"></div>
+                    <div class="col-12"><label class="form-label">Parent/Guardian Address</label><textarea name="parent_address" class="form-control" rows="2"><?php echo htmlspecialchars($old['parent_address'] ?? ''); ?></textarea></div>
                 </div>
             </div>
         </div>
