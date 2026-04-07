@@ -195,7 +195,6 @@ body {
     position: sticky;
     top: var(--topbar-h);
     height: calc(100vh - var(--topbar-h));
-    overflow-y: auto;
 }
 
 #sidebar.collapsed {
@@ -205,7 +204,7 @@ body {
 
 .sidebar-inner {
     width: var(--sidebar-w);
-    padding: 16px 0;
+    padding: 16px 0 0 0;
     transition: width .3s ease;
 }
 
@@ -278,12 +277,12 @@ body {
 .card {
     border: none;
     border-radius: var(--card-radius);
-    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
     transition: transform .2s, box-shadow .2s;
     background: #fff;
 }
 
-.card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+.card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.12); }
 
 .card-header {
     background: #fff;
@@ -472,7 +471,7 @@ canvas { max-height: 280px; width: 100% !important; }
 .sidebar-inner {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
 }
 .sidebar-nav-scroll {
     flex-grow: 1;
@@ -483,7 +482,27 @@ canvas { max-height: 280px; width: 100% !important; }
     margin-top: auto;
     background: rgba(0,0,0,0.15);
     border-top: 1px solid rgba(255,255,255,0.05);
-    padding-bottom: 1rem;
+    padding-bottom: 0;
+}
+
+.sidebar-bottom-group .sidebar-nav {
+    margin-bottom: 0;
+}
+
+.sidebar-bottom-group .sidebar-section {
+    font-size: 0.65rem;
+    margin-top: 6px;
+    padding-bottom: 2px;
+}
+
+.sidebar-bottom-group .sidebar-nav li a {
+    padding: 3px 10px;
+    font-size: 0.7rem;
+    gap: 8px;
+}
+
+.sidebar-bottom-group .sidebar-nav li a i {
+    font-size: 0.9rem;
 }
 
 /* Form Helper Card */

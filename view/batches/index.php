@@ -14,7 +14,7 @@ $B = BASE_URL;
     <a href="<?php echo $B; ?>/index.php?page=batch-add" class="btn btn-olive"><i class="bi bi-plus-circle me-1"></i>Add Batch</a>
 </div>
 <?php if (isset($_SESSION['flash'])): ?><div class="alert alert-success flash-msg"><?php echo $_SESSION['flash']; unset($_SESSION['flash']); ?></div><?php endif; ?>
-<div class="card"><div class="card-header d-flex justify-content-between"><h6 class="mb-0">All Batches <span class="badge bg-secondary"><?php echo count($rows); ?></span></h6><input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search…" style="width:200px"></div>
+<div class="card"><div class="card-header d-flex justify-content-between"><h6 class="mb-0">All Batches <span class="badge bg-secondary"><?php echo count($rows); ?></span></h6><div class="d-flex"><select id="tableFilter" class="form-select form-select-sm me-2" style="width:120px"><option value="">All</option><option value="active">Active</option><option value="inactive">Inactive</option></select><input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search…" style="width:200px"></div></div>
 <div class="card-body p-0"><div class="table-responsive"><table class="table table-hover mb-0">
     <thead><tr><th>#</th><th>Code</th><th>Batch</th><th>Program</th><th>Year</th><th>Semester</th><th>Students</th><th>Status</th><th>Actions</th></tr></thead>
     <tbody>

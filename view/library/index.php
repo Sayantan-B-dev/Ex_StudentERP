@@ -22,7 +22,7 @@ $B = BASE_URL;
     <div class="col-md-3"><div class="stat-card" style="background:#27ae60"><div><h6>Available</h6><h2><?php echo $availableBooks; ?></h2></div><i class="bi bi-check-circle-fill stat-icon"></i></div></div>
     <div class="col-md-3"><div class="stat-card" style="background:var(--charcoal)"><div><h6>Issued</h6><h2><?php echo $totalBooks - $availableBooks; ?></h2></div><i class="bi bi-arrow-right-circle-fill stat-icon"></i></div></div>
 </div>
-<div class="card"><div class="card-header d-flex justify-content-between"><h6 class="mb-0">Library Catalog</h6><input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search…" style="width:200px"></div>
+<div class="card"><div class="card-header d-flex justify-content-between"><h6 class="mb-0">Library Catalog</h6><div class="d-flex"><select id="tableFilter" class="form-select form-select-sm me-2" style="width:120px"><option value="">All</option><option value="active">Active</option><option value="inactive">Inactive</option></select><input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search…" style="width:200px"></div></div>
 <div class="card-body p-0"><div class="table-responsive"><table class="table table-hover mb-0">
     <thead><tr><th>#</th><th>ISBN</th><th>Title</th><th>Author</th><th>Category</th><th>Publisher</th><th>Year</th><th>Copies</th><th>Available</th><th>Actions</th></tr></thead>
     <tbody>

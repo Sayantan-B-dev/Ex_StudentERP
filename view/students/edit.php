@@ -14,25 +14,28 @@ $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("UPDATE students SET
+        registration_no=?,roll=?,roll_extra=?,
         first_name=?,middle_name=?,last_name=?,date_of_birth=?,gender=?,blood_group=?,nationality=?,
-        religion=?,caste_category=?,aadhaar_number=?,personal_email=?,phone=?,alternate_phone=?,
+        religion=?,caste_category=?,aadhaar_number=?,identification_mark=?,identification_mark_extra=?,personal_email=?,phone=?,alternate_phone=?,
         permanent_address=?,current_address=?,city=?,state=?,pincode=?,country=?,
         program_id=?,batch_id=?,current_semester=?,admission_type=?,admission_category=?,admission_date=?,
-        father_name=?,father_phone=?,father_email=?,mother_name=?,mother_phone=?,mother_email=?,
-        guardian_name=?,guardian_relation=?,guardian_phone=?,guardian_email=?,status=?
+        father_name=?,father_phone=?,father_email=?,father_occupation=?,mother_name=?,mother_phone=?,mother_email=?,mother_occupation=?,
+        guardian_name=?,guardian_relation=?,guardian_phone=?,guardian_email=?,parent_address=?,status=?
         WHERE id=?");
     $stmt->execute([
+        $_POST['registration_no']??null,$_POST['roll']??null,$_POST['roll_extra']??null,
         $_POST['first_name'],$_POST['middle_name']??'',$_POST['last_name'],$_POST['date_of_birth'],$_POST['gender'],
         $_POST['blood_group']??null,$_POST['nationality']??'Indian',
         $_POST['religion']??null,$_POST['caste_category']??null,$_POST['aadhaar_number']??null,
+        $_POST['identification_mark']??null, $_POST['identification_mark_extra']??null,
         $_POST['personal_email']??null,$_POST['phone']??null,$_POST['alternate_phone']??null,
         $_POST['permanent_address']??'',$_POST['current_address']??null,$_POST['city']??null,
         $_POST['state']??null,$_POST['pincode']??null,$_POST['country']??'India',
         $_POST['program_id']?:null,$_POST['batch_id']?:null,$_POST['current_semester']??1,
         $_POST['admission_type']??'regular',$_POST['admission_category']??'general',$_POST['admission_date'],
-        $_POST['father_name']??null,$_POST['father_phone']??null,$_POST['father_email']??null,
-        $_POST['mother_name']??null,$_POST['mother_phone']??null,$_POST['mother_email']??null,
-        $_POST['guardian_name']??null,$_POST['guardian_relation']??null,$_POST['guardian_phone']??null,$_POST['guardian_email']??null,
+        $_POST['father_name']??null,$_POST['father_phone']??null,$_POST['father_email']??null,$_POST['father_occupation']??null,
+        $_POST['mother_name']??null,$_POST['mother_phone']??null,$_POST['mother_email']??null,$_POST['mother_occupation']??null,
+        $_POST['guardian_name']??null,$_POST['guardian_relation']??null,$_POST['guardian_phone']??null,$_POST['guardian_email']??null,$_POST['parent_address']??null,
         $_POST['status']??'active',$id
     ]);
     logActivity($pdo, 'Edit Student', 'Students', "Updated record for student ID: $id ($student[admission_number])");
@@ -56,6 +59,9 @@ $B = BASE_URL;
 <form method="POST" class="row g-4">
     <div class="col-12"><div class="card"><div class="card-header"><h6 class="mb-0">Personal Information</h6></div><div class="card-body">
         <div class="row g-3">
+            <div class="col-md-2"><label class="form-label">Reg. No.</label><input type="text" name="registration_no" class="form-control" value="<?php echo htmlspecialchars($t['registration_no']??''); ?>"></div>
+            <div class="col-md-1"><label class="form-label">Roll</label><input type="text" name="roll" class="form-control" value="<?php echo htmlspecialchars($t['roll']??''); ?>"></div>
+            <div class="col-md-1"><label class="form-label">No.</label><input type="text" name="roll_extra" class="form-control" value="<?php echo htmlspecialchars($t['roll_extra']??''); ?>"></div>
             <div class="col-md-4"><label class="form-label">First Name</label><input type="text" name="first_name" class="form-control" value="<?php echo htmlspecialchars($t['first_name']); ?>" required></div>
             <div class="col-md-4"><label class="form-label">Middle Name</label><input type="text" name="middle_name" class="form-control" value="<?php echo htmlspecialchars($t['middle_name']??''); ?>"></div>
             <div class="col-md-4"><label class="form-label">Last Name</label><input type="text" name="last_name" class="form-control" value="<?php echo htmlspecialchars($t['last_name']); ?>" required></div>
@@ -69,6 +75,11 @@ $B = BASE_URL;
             <div class="col-md-3"><label class="form-label">Status</label><select name="status" class="form-select">
                 <?php foreach (['active','inactive','graduated','suspended','discontinued'] as $st): ?><option value="<?php echo $st; ?>" <?php echo $t['status']===$st?'selected':''; ?>><?php echo ucfirst($st); ?></option><?php endforeach; ?>
             </select></div>
+            <div class="col-md-3"><label class="form-label">Religion</label><input type="text" name="religion" class="form-control" value="<?php echo htmlspecialchars($t['religion']??''); ?>"></div>
+            <div class="col-md-3"><label class="form-label">Caste Category</label><select name="caste_category" class="form-select"><option value="">Select</option><?php foreach (['General','OBC','SC','ST','EWS','Other'] as $c): ?><option value="<?php echo $c; ?>" <?php echo ($t['caste_category']??'')===$c?'selected':''; ?>><?php echo $c; ?></option><?php endforeach; ?></select></div>
+            <div class="col-md-3"><label class="form-label">Aadhaar No.</label><input type="text" name="aadhaar_number" class="form-control" value="<?php echo htmlspecialchars($t['aadhaar_number']??''); ?>"></div>
+            <div class="col-md-6"><label class="form-label">Identification Mark 1</label><input type="text" name="identification_mark" class="form-control" value="<?php echo htmlspecialchars($t['identification_mark']??''); ?>"></div>
+            <div class="col-md-6"><label class="form-label">Identification Mark 2</label><input type="text" name="identification_mark_extra" class="form-control" value="<?php echo htmlspecialchars($t['identification_mark_extra']??''); ?>"></div>
             <div class="col-md-4"><label class="form-label">Personal Email</label><input type="email" name="personal_email" class="form-control" value="<?php echo htmlspecialchars($t['personal_email']??''); ?>"></div>
             <div class="col-md-4"><label class="form-label">Phone</label><input type="text" name="phone" class="form-control" value="<?php echo htmlspecialchars($t['phone']??''); ?>"></div>
             <div class="col-md-4"><label class="form-label">Alternate Phone</label><input type="text" name="alternate_phone" class="form-control" value="<?php echo htmlspecialchars($t['alternate_phone']??''); ?>"></div>
@@ -100,11 +111,14 @@ $B = BASE_URL;
         <div class="row g-3">
             <div class="col-md-3"><label class="form-label">Father Name</label><input type="text" name="father_name" class="form-control" value="<?php echo htmlspecialchars($t['father_name']??''); ?>"></div>
             <div class="col-md-3"><label class="form-label">Father Phone</label><input type="text" name="father_phone" class="form-control" value="<?php echo htmlspecialchars($t['father_phone']??''); ?>"></div>
+            <div class="col-md-3"><label class="form-label">Father Occupation</label><input type="text" name="father_occupation" class="form-control" value="<?php echo htmlspecialchars($t['father_occupation']??''); ?>"></div>
             <div class="col-md-3"><label class="form-label">Mother Name</label><input type="text" name="mother_name" class="form-control" value="<?php echo htmlspecialchars($t['mother_name']??''); ?>"></div>
             <div class="col-md-3"><label class="form-label">Mother Phone</label><input type="text" name="mother_phone" class="form-control" value="<?php echo htmlspecialchars($t['mother_phone']??''); ?>"></div>
+            <div class="col-md-3"><label class="form-label">Mother Occupation</label><input type="text" name="mother_occupation" class="form-control" value="<?php echo htmlspecialchars($t['mother_occupation']??''); ?>"></div>
             <div class="col-md-4"><label class="form-label">Guardian Name</label><input type="text" name="guardian_name" class="form-control" value="<?php echo htmlspecialchars($t['guardian_name']??''); ?>"></div>
             <div class="col-md-4"><label class="form-label">Relation</label><input type="text" name="guardian_relation" class="form-control" value="<?php echo htmlspecialchars($t['guardian_relation']??''); ?>"></div>
             <div class="col-md-4"><label class="form-label">Guardian Phone</label><input type="text" name="guardian_phone" class="form-control" value="<?php echo htmlspecialchars($t['guardian_phone']??''); ?>"></div>
+            <div class="col-12"><label class="form-label">Parent/Guardian Address</label><textarea name="parent_address" class="form-control" rows="2"><?php echo htmlspecialchars($t['parent_address']??''); ?></textarea></div>
         </div>
     </div></div></div>
     <div class="col-12 d-flex gap-2">

@@ -15,44 +15,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($_POST[$f])) $errors[] = "Field '$f' is required.";
     }
     if (!$errors) {
-        // Generate admission number
-        $year = date('Y');
-        $count = $pdo->query("SELECT COUNT(*) FROM students WHERE YEAR(created_at)=$year")->fetchColumn();
-        $adm_no = 'ADM'.$year.str_pad($count+1, 4, '0', STR_PAD_LEFT);
+        if (isset($_POST['action']) && $_POST['action'] === 'bulk_upload') {
+            if (!empty($_FILES['csv_file']['tmp_name'])) {
+                $file = fopen($_FILES['csv_file']['tmp_name'], 'r');
+                $header = fgetcsv($file);
+                $count_total = 0; $count_success = 0;
+                
+                // Pre-fetch programs and batches for quick lookup
+                $p_map = []; $b_map = [];
+                foreach ($programs as $p) $p_map[strtolower($p['code'])] = $p['id'];
+                foreach ($batches as $b)   $b_map[strtolower($b['batch_code'])] = $b['id'];
 
-        $stmt = $pdo->prepare("INSERT INTO students (admission_number,first_name,middle_name,last_name,
-            date_of_birth,gender,blood_group,nationality,religion,caste_category,
-            personal_email,phone,alternate_phone,permanent_address,current_address,city,state,pincode,country,
-            program_id,batch_id,admission_date,admission_type,admission_category,current_semester,
-            father_name,father_phone,father_email,mother_name,mother_phone,
-            guardian_name,guardian_relation,guardian_phone,status,created_by)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $stmt->execute([
-            $adm_no,
-            $_POST['first_name'], $_POST['middle_name'] ?? '', $_POST['last_name'],
-            $_POST['date_of_birth'], $_POST['gender'], $_POST['blood_group'] ?? null,
-            $_POST['nationality'] ?? 'Indian', $_POST['religion'] ?? null, $_POST['caste_category'] ?? null,
-            $_POST['personal_email'] ?? null, $_POST['phone'] ?? null, $_POST['alternate_phone'] ?? null,
-            $_POST['permanent_address'], $_POST['current_address'] ?? null,
-            $_POST['city'] ?? null, $_POST['state'] ?? null, $_POST['pincode'] ?? null,
-            $_POST['country'] ?? 'India',
-            $_POST['program_id'] ?: null, $_POST['batch_id'] ?: null,
-            $_POST['admission_date'], $_POST['admission_type'] ?? 'regular',
-            $_POST['admission_category'] ?? 'general', $_POST['current_semester'] ?? 1,
-            $_POST['father_name'] ?? null, $_POST['father_phone'] ?? null, $_POST['father_email'] ?? null,
-            $_POST['mother_name'] ?? null, $_POST['mother_phone'] ?? null,
-            $_POST['guardian_name'] ?? null, $_POST['guardian_relation'] ?? null, $_POST['guardian_phone'] ?? null,
-            'active', $_SESSION['user_id']
-        ]);
-        logActivity($pdo, 'Add Student', 'Students', "Added student: $_POST[first_name] $_POST[last_name] ($adm_no)");
-        $_SESSION['flash'] = "Student '$adm_no' added successfully.";
-        header('Location: '.BASE_URL.'/index.php?page=student-information');
-        exit;
+                $stmt = $pdo->prepare("INSERT INTO students (admission_number,registration_no,first_name,last_name,date_of_birth,gender,phone,program_id,batch_id,status,admission_date,permanent_address,created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+
+                while (($row = fgetcsv($file)) !== false) {
+                    $count_total++;
+                    $data = array_combine($header, $row);
+                    
+                    $year = date('Y');
+                    $curr_count = $pdo->query("SELECT COUNT(*) FROM students WHERE YEAR(created_at)=$year")->fetchColumn();
+                    $adm_no = 'ADM'.$year.str_pad($curr_count+1, 4, '0', STR_PAD_LEFT);
+                    
+                    $pid = isset($data['program_code']) ? ($p_map[strtolower($data['program_code'])] ?? null) : null;
+                    $bid = isset($data['batch_code']) ? ($b_map[strtolower($data['batch_code'])] ?? null) : null;
+
+                    try {
+                        $stmt->execute([
+                            $adm_no, $data['registration_no']??null, $data['first_name'], $data['last_name'],
+                            $data['date_of_birth'], $data['gender']??'male', $data['phone']??null,
+                            $pid, $bid, 'active', date('Y-m-d'), $data['address']??'Bulk Import', $_SESSION['user_id']
+                        ]);
+                        $count_success++;
+                    } catch (Exception $e) {}
+                }
+                fclose($file);
+                $_SESSION['flash'] = "Bulk Upload: $count_success of $count_total students imported.";
+                header('Location: '.BASE_URL.'/index.php?page=student-information'); exit;
+            }
+        } else {
+            // Generate admission number
+            $year = date('Y');
+            $count = $pdo->query("SELECT COUNT(*) FROM students WHERE YEAR(created_at)=$year")->fetchColumn();
+            $adm_no = 'ADM'.$year.str_pad($count+1, 4, '0', STR_PAD_LEFT);
+
+            $stmt = $pdo->prepare("INSERT INTO students (admission_number,registration_no,roll,roll_extra,first_name,middle_name,last_name,
+                date_of_birth,gender,blood_group,nationality,religion,caste_category,aadhaar_number,identification_mark,identification_mark_extra,
+                personal_email,phone,alternate_phone,permanent_address,current_address,city,state,pincode,country,
+                program_id,batch_id,admission_date,admission_type,admission_category,current_semester,
+                father_name,father_phone,father_email,father_occupation,mother_name,mother_phone,mother_email,mother_occupation,
+                guardian_name,guardian_relation,guardian_phone,parent_address,status,created_by)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $stmt->execute([
+                $adm_no, $_POST['registration_no'] ?? null, $_POST['roll'] ?? null, $_POST['roll_extra'] ?? null,
+                $_POST['first_name'], $_POST['middle_name'] ?? '', $_POST['last_name'],
+                $_POST['date_of_birth'], $_POST['gender'], $_POST['blood_group'] ?? null,
+                $_POST['nationality'] ?? 'Indian', $_POST['religion'] ?? null, $_POST['caste_category'] ?? null,
+                $_POST['aadhaar_number'] ?? null, $_POST['identification_mark'] ?? null, $_POST['identification_mark_extra'] ?? null,
+                $_POST['personal_email'] ?? null, $_POST['phone'] ?? null, $_POST['alternate_phone'] ?? null,
+                $_POST['permanent_address'], $_POST['current_address'] ?? null,
+                $_POST['city'] ?? null, $_POST['state'] ?? null, $_POST['pincode'] ?? null,
+                $_POST['country'] ?? 'India',
+                $_POST['program_id'] ?: null, $_POST['batch_id'] ?: null,
+                $_POST['admission_date'], $_POST['admission_type'] ?? 'regular',
+                $_POST['admission_category'] ?? 'general', $_POST['current_semester'] ?? 1,
+                $_POST['father_name'] ?? null, $_POST['father_phone'] ?? null, $_POST['father_email'] ?? null, $_POST['father_occupation'] ?? null,
+                $_POST['mother_name'] ?? null, $_POST['mother_phone'] ?? null, $_POST['mother_email'] ?? null, $_POST['mother_occupation'] ?? null,
+                $_POST['guardian_name'] ?? null, $_POST['guardian_relation'] ?? null, $_POST['guardian_phone'] ?? null, $_POST['parent_address'] ?? null,
+                'active', $_SESSION['user_id']
+            ]);
+            logActivity($pdo, 'Add Student', 'Students', "Added student: $_POST[first_name] $_POST[last_name] ($adm_no)");
+            $_SESSION['flash'] = "Student '$adm_no' added successfully.";
+            header('Location: '.BASE_URL.'/index.php?page=student-information');
+            exit;
+        }
     }
 }
 $B = BASE_URL;
 ?>
-<div class="page-header">
+<div class="page-header justify-content-between">
     <div>
         <h1 class="page-title"><i class="bi bi-person-plus me-2" style="color:var(--olive)"></i>Add New Student</h1>
         <nav aria-label="breadcrumb"><ol class="breadcrumb">
@@ -60,9 +100,19 @@ $B = BASE_URL;
             <li class="breadcrumb-item active">Add</li>
         </ol></nav>
     </div>
-    <a href="<?php echo $B; ?>/index.php?page=student-information" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+    <div class="d-flex gap-2">
+        <a href="<?php echo $B; ?>/index.php?page=student-information" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+    </div>
 </div>
 
+<ul class="nav nav-pills mb-4 gap-2" id="addTabs">
+    <li class="nav-item"><button class="nav-link active bg-olive text-white" id="single-tab" data-bs-toggle="pill" data-bs-target="#single-form">Single Registration</button></li>
+    <li class="nav-item"><button class="nav-link border text-muted" id="bulk-tab" data-bs-toggle="pill" data-bs-target="#bulk-form">Bulk Upload (CSV)</button></li>
+</ul>
+
+<div class="tab-content">
+    <!-- Single Registration -->
+    <div class="tab-pane fade show active" id="single-form">
 <?php if ($errors): ?>
 <div class="alert alert-danger mb-4">
     <strong>Please fix the following errors:</strong>
@@ -77,6 +127,18 @@ $B = BASE_URL;
             <div class="card-header"><h6 class="mb-0"><i class="bi bi-person me-2"></i>Personal Information</h6></div>
             <div class="card-body">
                 <div class="row g-3">
+                    <div class="col-md-2">
+                        <label class="form-label">Reg. No.</label>
+                        <input type="text" name="registration_no" class="form-control" value="<?php echo htmlspecialchars($old['registration_no'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label">Roll</label>
+                        <input type="text" name="roll" class="form-control" value="<?php echo htmlspecialchars($old['roll'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label">No.</label>
+                        <input type="text" name="roll_extra" class="form-control" value="<?php echo htmlspecialchars($old['roll_extra'] ?? ''); ?>">
+                    </div>
                     <div class="col-md-4">
                         <label class="form-label">First Name <span class="text-danger">*</span></label>
                         <input type="text" name="first_name" class="form-control" value="<?php echo htmlspecialchars($old['first_name'] ?? ''); ?>" required>
@@ -119,6 +181,22 @@ $B = BASE_URL;
                             <option value="<?php echo $c; ?>" <?php echo ($old['caste_category']??'')===$c?'selected':''; ?>><?php echo $c; ?></option>
                             <?php endforeach; ?>
                         </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Religion</label>
+                        <input type="text" name="religion" class="form-control" value="<?php echo htmlspecialchars($old['religion'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Aadhaar No.</label>
+                        <input type="text" name="aadhaar_number" class="form-control" value="<?php echo htmlspecialchars($old['aadhaar_number'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Identification Mark 1</label>
+                        <input type="text" name="identification_mark" class="form-control" value="<?php echo htmlspecialchars($old['identification_mark'] ?? ''); ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Identification Mark 2</label>
+                        <input type="text" name="identification_mark_extra" class="form-control" value="<?php echo htmlspecialchars($old['identification_mark_extra'] ?? ''); ?>">
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Personal Email</label>
@@ -231,11 +309,15 @@ $B = BASE_URL;
                     <div class="col-md-4"><label class="form-label">Father's Name</label><input type="text" name="father_name" class="form-control" value="<?php echo htmlspecialchars($old['father_name'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Father's Phone</label><input type="text" name="father_phone" class="form-control" value="<?php echo htmlspecialchars($old['father_phone'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Father's Email</label><input type="email" name="father_email" class="form-control" value="<?php echo htmlspecialchars($old['father_email'] ?? ''); ?>"></div>
+                    <div class="col-md-3"><label class="form-label">Father's Occupation</label><input type="text" name="father_occupation" class="form-control" value="<?php echo htmlspecialchars($old['father_occupation'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Mother's Name</label><input type="text" name="mother_name" class="form-control" value="<?php echo htmlspecialchars($old['mother_name'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Mother's Phone</label><input type="text" name="mother_phone" class="form-control" value="<?php echo htmlspecialchars($old['mother_phone'] ?? ''); ?>"></div>
+                    <div class="col-md-4"><label class="form-label">Mother's Email</label><input type="email" name="mother_email" class="form-control" value="<?php echo htmlspecialchars($old['mother_email'] ?? ''); ?>"></div>
+                    <div class="col-md-3"><label class="form-label">Mother's Occupation</label><input type="text" name="mother_occupation" class="form-control" value="<?php echo htmlspecialchars($old['mother_occupation'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Guardian Name</label><input type="text" name="guardian_name" class="form-control" value="<?php echo htmlspecialchars($old['guardian_name'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Relation</label><input type="text" name="guardian_relation" class="form-control" value="<?php echo htmlspecialchars($old['guardian_relation'] ?? ''); ?>"></div>
                     <div class="col-md-4"><label class="form-label">Guardian Phone</label><input type="text" name="guardian_phone" class="form-control" value="<?php echo htmlspecialchars($old['guardian_phone'] ?? ''); ?>"></div>
+                    <div class="col-12"><label class="form-label">Parent/Guardian Address</label><textarea name="parent_address" class="form-control" rows="2"><?php echo htmlspecialchars($old['parent_address'] ?? ''); ?></textarea></div>
                 </div>
             </div>
         </div>
@@ -247,6 +329,59 @@ $B = BASE_URL;
         <a href="<?php echo $B; ?>/index.php?page=student-information" class="btn btn-outline-secondary">Cancel</a>
     </div>
 </form>
+    </div>
+
+    <!-- Bulk Upload -->
+    <div class="tab-pane fade" id="bulk-form">
+        <div class="card mb-4">
+            <div class="card-header"><h6 class="mb-0"><i class="bi bi-upload me-2"></i>Bulk Student Import</h6></div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>Download the <a href="<?php echo $B; ?>/assets/samples/students_template.csv" class="fw-bold">CSV Template</a>, fill it, and upload below. Admission numbers will be auto-generated.
+                </div>
+                <form method="POST" enctype="multipart/form-data" class="col-md-6 mx-auto py-4">
+                    <input type="hidden" name="action" value="bulk_upload">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Select CSV File</label>
+                        <input type="file" name="csv_file" class="form-control form-control-lg" accept=".csv" required>
+                    </div>
+                    <button type="submit" class="btn btn-olive btn-lg w-100"><i class="bi bi-cloud-arrow-up me-2"></i>Process Upload</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-light"><h6 class="mb-0">CSV Structure Guide</h6></div>
+            <div class="card-body small">
+                <table class="table table-sm table-bordered mb-0">
+                    <tr class="table-secondary"><th>Column</th><th>Required</th><th>Description / Format</th></tr>
+                    <tr><td>first_name</td><td>Yes</td><td>String</td></tr>
+                    <tr><td>last_name</td><td>Yes</td><td>String</td></tr>
+                    <tr><td>registration_no</td><td>No</td><td>Unique ID</td></tr>
+                    <tr><td>program_code</td><td>No</td><td>Matching Code (e.g. CSE)</td></tr>
+                    <tr><td>batch_code</td><td>No</td><td>Matching Code (e.g. 2023-27)</td></tr>
+                    <tr><td>phone</td><td>No</td><td>Numbers only</td></tr>
+                    <tr><td>date_of_birth</td><td>Yes</td><td>YYYY-MM-DD</td></tr>
+                    <tr><td>gender</td><td>Yes</td><td>male/female/other</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('#addTabs button');
+    tabs.forEach(t => {
+        t.addEventListener('click', function() {
+            tabs.forEach(btn => btn.classList.remove('active', 'bg-olive', 'text-white'));
+            tabs.forEach(btn => btn.classList.add('border', 'text-muted'));
+            this.classList.remove('border', 'text-muted');
+            this.classList.add('active', 'bg-olive', 'text-white');
+        });
+    });
+});
+</script>
 
 <div class="form-help-card">
     <h6><i class="bi bi-info-circle me-2"></i>Student Registration Help</h6>

@@ -10,7 +10,7 @@ $stmt->execute([$id]);
 $s = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$s) { echo '<div class="alert alert-danger">Student not found.</div>'; return; }
 $B = BASE_URL;
-$badge = match($s['status']) { 'active'=>'badge-active','inactive'=>'badge-inactive','graduated'=>'badge-completed', default=>'badge-pending' };
+$badge = match($s['status'] ?? '') { 'active'=>'badge-active','inactive'=>'badge-inactive','graduated'=>'badge-completed', default=>'badge-pending' };
 ?>
 <div class="page-header">
     <div>
@@ -56,38 +56,134 @@ $badge = match($s['status']) { 'active'=>'badge-active','inactive'=>'badge-inact
                     <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#personal">Personal</button></li>
                     <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#contact">Contact</button></li>
                     <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#guardian">Guardian</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#fees">Fees</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#attendance">Attendance</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#results">Results</button></li>
                 </ul>
             </div>
             <div class="card-body tab-content">
                 <!-- Personal -->
                 <div class="tab-pane fade show active" id="personal">
-                    <div class="row g-2 mt-1">
+                    <div class="row g-3 mt-1">
                         <?php
-                        $fields_personal = ['Date of Birth'=>$s['date_of_birth'],'Gender'=>ucfirst($s['gender']),'Blood Group'=>$s['blood_group'],'Nationality'=>$s['nationality'],'Religion'=>$s['religion'],'Caste Category'=>$s['caste_category'],'Aadhaar'=>$s['aadhaar_number']];
+                        $fields_personal = [
+                            'Reg. No.' => $s['registration_no'] ?? '—',
+                            'Roll' => $s['roll'] ?? '—',
+                            'No.' => $s['roll_extra'] ?? '—',
+                            'Date of Birth' => $s['date_of_birth'] ?? '—',
+                            'Gender' => ucfirst($s['gender'] ?? '—'),
+                            'Blood Group' => $s['blood_group'] ?? '—',
+                            'Nationality' => $s['nationality'] ?? '—'
+                        ];
                         foreach ($fields_personal as $lbl => $val): ?>
-                        <div class="col-6"><small class="text-muted"><?php echo $lbl; ?></small><div class="fw-medium"><?php echo htmlspecialchars($val ?: '—'); ?></div></div>
+                        <div class="col-md-4"><small class="text-muted d-block"><?php echo $lbl; ?></small><div class="fw-bold"><?php echo htmlspecialchars($val ?: '—'); ?></div></div>
                         <?php endforeach; ?>
+                        <div class="col-md-4"><small class="text-muted d-block">Religion</small><div class="fw-bold"><?php echo htmlspecialchars($s['religion'] ?? '—'); ?></div></div>
+                        <div class="col-md-4"><small class="text-muted d-block">Caste Category</small><div class="fw-bold"><?php echo htmlspecialchars($s['caste_category'] ?? '—'); ?></div></div>
+                        <div class="col-md-4"><small class="text-muted d-block">Aadhaar</small><div class="fw-bold"><?php echo htmlspecialchars($s['aadhaar_number'] ?? '—'); ?></div></div>
+                        <div class="col-12"><small class="text-muted d-block">Identification Marks</small><div class="fw-bold">1. <?php echo htmlspecialchars($s['identification_mark'] ?: '—'); ?><br>2. <?php echo htmlspecialchars($s['identification_mark_extra'] ?: '—'); ?></div></div>
                     </div>
                 </div>
                 <!-- Contact -->
                 <div class="tab-pane fade" id="contact">
-                    <div class="row g-2 mt-1">
+                    <div class="row g-3 mt-1">
                         <?php
-                        $fields_contact = ['Phone'=>$s['phone'],'Alternate Phone'=>$s['alternate_phone'],'Personal Email'=>$s['personal_email'],'City'=>$s['city'],'State'=>$s['state'],'Pincode'=>$s['pincode'],'Country'=>$s['country'],'Address'=>$s['permanent_address']];
+                        $fields_contact = ['Phone'=>$s['phone'],'Alt Phone'=>$s['alternate_phone'],'Personal Email'=>$s['personal_email'],'City'=>$s['city'],'State'=>$s['state'],'Pincode'=>$s['pincode'],'Country'=>$s['country']];
                         foreach ($fields_contact as $lbl => $val): ?>
-                        <div class="col-6"><small class="text-muted"><?php echo $lbl; ?></small><div class="fw-medium"><?php echo htmlspecialchars($val ?: '—'); ?></div></div>
+                        <div class="col-md-4"><small class="text-muted d-block"><?php echo $lbl; ?></small><div class="fw-bold"><?php echo htmlspecialchars($val ?: '—'); ?></div></div>
                         <?php endforeach; ?>
+                        <div class="col-12"><small class="text-muted d-block">Address</small><div class="fw-bold"><?php echo htmlspecialchars($s['permanent_address'] ?? '—'); ?></div></div>
                     </div>
                 </div>
                 <!-- Guardian -->
                 <div class="tab-pane fade" id="guardian">
-                    <div class="row g-2 mt-1">
+                    <div class="row g-3 mt-1">
                         <?php
-                        $fields_g = ["Father's Name"=>$s['father_name'],"Father's Phone"=>$s['father_phone'],"Mother's Name"=>$s['mother_name'],"Mother's Phone"=>$s['mother_phone'],'Guardian Name'=>$s['guardian_name'],'Relation'=>$s['guardian_relation'],'Guardian Phone'=>$s['guardian_phone']];
+                        $fields_g = [
+                            "Father's Name" => $s['father_name'] ?? '—',
+                            "Father's Phone" => $s['father_phone'] ?? '—',
+                            "Father's Occupation" => $s['father_occupation'] ?? '—',
+                            "Mother's Name" => $s['mother_name'] ?? '—',
+                            "Mother's Phone" => $s['mother_phone'] ?? '—',
+                            "Mother's Occupation" => $s['mother_occupation'] ?? '—',
+                            'Guardian Name' => $s['guardian_name'] ?? '—',
+                            'Relation' => $s['guardian_relation'] ?? '—',
+                            'Guardian Phone' => $s['guardian_phone'] ?? '—',
+                        ];
                         foreach ($fields_g as $lbl => $val): ?>
-                        <div class="col-6"><small class="text-muted"><?php echo $lbl; ?></small><div class="fw-medium"><?php echo htmlspecialchars($val ?: '—'); ?></div></div>
+                        <div class="col-md-4"><small class="text-muted d-block"><?php echo $lbl; ?></small><div class="fw-bold"><?php echo htmlspecialchars($val ?: '—'); ?></div></div>
                         <?php endforeach; ?>
+                        <div class="col-12"><small class="text-muted d-block">Parent Address</small><div class="fw-bold"><?php echo htmlspecialchars($s['parent_address'] ?? '—'); ?></div></div>
                     </div>
+                </div>
+                <!-- Fees -->
+                <div class="tab-pane fade" id="fees">
+                    <?php
+                    $stmtF = $pdo->prepare("SELECT * FROM fee_transactions WHERE student_id=? ORDER BY transaction_date DESC");
+                    $stmtF->execute([$id]);
+                    $fees = $stmtF->fetchAll(PDO::FETCH_ASSOC);
+                    if ($fees): ?>
+                    <div class="table-responsive"><table class="table table-sm table-hover border">
+                        <thead class="bg-light"><tr><th>Receipt</th><th>Type</th><th>Paid</th><th>Fine</th><th>Date</th><th>Status</th></tr></thead>
+                        <tbody><?php foreach($fees as $f): ?>
+                            <tr><td><code><?php echo $f['receipt_number']; ?></code></td><td><?php echo ucfirst($f['fee_type']); ?></td><td class="fw-bold"><?php echo number_format($f['amount_paid'],2); ?></td><td class="text-danger">+<?php echo number_format($f['fine_amount'],0); ?></td><td><?php echo $f['transaction_date']; ?></td><td><span class="badge <?php echo $f['payment_status']==='paid'?'badge-active':'badge-inactive'; ?>"><?php echo ucfirst($f['payment_status']); ?></span></td></tr>
+                        <?php endforeach; ?></tbody>
+                    </table></div>
+                    <?php else: ?><div class="text-center py-4 text-muted"><i class="bi bi-wallet2 fs-2 d-block"></i>No fee records found.</div><?php endif; ?>
+                </div>
+                <!-- Attendance -->
+                <div class="tab-pane fade" id="attendance">
+                    <?php
+                    $stmtA = $pdo->prepare("SELECT status, COUNT(*) as count FROM attendance WHERE student_id=? GROUP BY status");
+                    $stmtA->execute([$id]);
+                    $attData = $stmtA->fetchAll(PDO::FETCH_KEY_PAIR);
+                    $totalAtt = array_sum($attData);
+                    $presentRate = $totalAtt > 0 ? round(($attData['present'] ?? 0) / $totalAtt * 100) : 0;
+                    ?>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-5 text-center border-end">
+                            <h2 class="fw-bold text-olive mb-0"><?php echo $presentRate; ?>%</h2>
+                            <small class="text-muted">Attendance Rate</small>
+                            <div class="progress mt-2" style="height:8px"><div class="progress-bar bg-success" style="width: <?php echo $presentRate; ?>%"></div></div>
+                        </div>
+                        <div class="col-md-7 ps-4">
+                            <div class="d-flex justify-content-between mb-1"><span>Present</span><strong><?php echo $attData['present'] ?? 0; ?></strong></div>
+                            <div class="d-flex justify-content-between mb-1"><span>Absent</span><strong class="text-danger"><?php echo $attData['absent'] ?? 0; ?></strong></div>
+                            <div class="d-flex justify-content-between"><span>Total Classes</span><strong><?php echo $totalAtt; ?></strong></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Academic Results (v1.7) -->
+                <div class="tab-pane fade" id="results">
+                    <?php
+                    $grades = $pdo->prepare("SELECT sg.*, sub.name as subject_name, sub.code as sub_code FROM student_grades sg JOIN subjects sub ON sg.subject_id=sub.id WHERE student_id=? ORDER BY sg.created_at DESC");
+                    $grades->execute([$id]);
+                    $g_rows = $grades->fetchAll(PDO::FETCH_ASSOC);
+                    if ($g_rows): ?>
+                    <div class="table-responsive mt-2">
+                        <table class="table table-sm table-hover border">
+                            <thead class="bg-light"><tr><th>Reg./Roll</th><th>Subject</th><th>Type</th><th>Score</th><th class="text-center">Grade</th></tr></thead>
+                            <tbody>
+                                <?php foreach ($g_rows as $gr): 
+                                    $g_badge = $gr['marks_obtained'] >= (0.4 * $gr['total_marks']) ? 'badge-active' : 'badge-inactive';
+                                ?>
+                                <tr>
+                                    <td><code><?php echo htmlspecialchars($s['registration_no'] ?: '—'); ?></code><br><small class="text-muted">RL: <?php echo htmlspecialchars($s['roll'] ?: '—'); ?></small></td>
+                                    <td><strong><?php echo $gr['sub_code']; ?></strong><br><small class="text-muted"><?php echo $gr['subject_name']; ?></small></td>
+                                    <td>
+                                        <?php if($gr['is_internal']) echo '<span class="badge bg-info px-1 py-0" style="font-size:0.6rem">Int</span> '; ?>
+                                        <?php if($gr['is_semester']) echo '<span class="badge bg-primary px-1 py-0" style="font-size:0.6rem">Sem</span>'; ?>
+                                    </td>
+                                    <td class="fw-bold"><?php echo $gr['marks_obtained']; ?>/<?php echo $gr['total_marks']; ?></td>
+                                    <td class="text-center"><span class="badge <?php echo $g_badge; ?>"><?php echo $gr['grade']; ?></span></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php else: ?>
+                    <div class="text-center py-5 text-muted"><i class="bi bi-mortarboard fs-2 d-block mb-2"></i>No result records available.</div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

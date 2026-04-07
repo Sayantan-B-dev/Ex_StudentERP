@@ -23,7 +23,7 @@ $B = BASE_URL;
     <div class="col-md-3"><div class="stat-card" style="background:var(--olive)"><div><h6>Total Programs</h6><h2><?php echo $total; ?></h2></div><i class="bi bi-mortarboard-fill stat-icon"></i></div></div>
     <div class="col-md-3"><div class="stat-card" style="background:var(--maroon)"><div><h6>Active</h6><h2><?php echo $active; ?></h2></div><i class="bi bi-check-circle-fill stat-icon"></i></div></div>
 </div>
-<div class="card"><div class="card-header d-flex justify-content-between"><h6 class="mb-0">All Programs</h6><input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search…" style="width:200px"></div>
+<div class="card"><div class="card-header d-flex justify-content-between"><h6 class="mb-0">All Programs</h6><div class="d-flex"><select id="tableFilter" class="form-select form-select-sm me-2" style="width:120px"><option value="">All</option><option value="active">Active</option><option value="inactive">Inactive</option></select><input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search…" style="width:200px"></div></div>
 <div class="card-body p-0"><div class="table-responsive"><table class="table table-hover mb-0">
     <thead><tr><th>#</th><th>Code</th><th>Name</th><th>Degree</th><th>Department</th><th>Duration</th><th>Fee</th><th>Students</th><th>Status</th><th>Actions</th></tr></thead>
     <tbody>

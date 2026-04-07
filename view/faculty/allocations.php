@@ -7,9 +7,16 @@ if (isset($_GET['action']) && $_GET['action']==='delete' && isset($_GET['id'])) 
     $_SESSION['flash'] = 'Allocation removed.'; header('Location: '.BASE_URL.'/index.php?page=staff-allocations'); exit;
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $pdo->prepare("INSERT INTO staff_subject_allocations (staff_id,subject_id,batch_id,academic_year,semester,allocation_type,hours_per_week,status) VALUES (?,?,?,?,?,?,?,?)")
-        ->execute([$_POST['staff_id'],$_POST['subject_id'],$_POST['batch_id']??null,$_POST['academic_year'],intval($_POST['semester']),$_POST['allocation_type']??'theory',$_POST['hours_per_week']??0,'active']);
-    $_SESSION['flash'] = 'Allocation saved.'; header('Location: '.BASE_URL.'/index.php?page=staff-allocations'); exit;
+    if (!empty($_POST['edit_id'])) {
+        $pdo->prepare("UPDATE staff_subject_allocations SET staff_id=?,subject_id=?,batch_id=?,academic_year=?,semester=?,allocation_type=?,hours_per_week=? WHERE id=?")
+            ->execute([$_POST['staff_id'],$_POST['subject_id'],$_POST['batch_id']?:null,$_POST['academic_year'],intval($_POST['semester']),$_POST['allocation_type']??'theory',$_POST['hours_per_week']??0,(int)$_POST['edit_id']]);
+        $_SESSION['flash'] = 'Allocation updated.';
+    } else {
+        $pdo->prepare("INSERT INTO staff_subject_allocations (staff_id,subject_id,batch_id,academic_year,semester,allocation_type,hours_per_week,status) VALUES (?,?,?,?,?,?,?,?)")
+            ->execute([$_POST['staff_id'],$_POST['subject_id'],$_POST['batch_id']??null,$_POST['academic_year'],intval($_POST['semester']),$_POST['allocation_type']??'theory',$_POST['hours_per_week']??0,'active']);
+        $_SESSION['flash'] = 'Allocation saved.';
+    }
+    header('Location: '.BASE_URL.'/index.php?page=staff-allocations'); exit;
 }
 $staff    = $pdo->query("SELECT id, CONCAT(first_name,' ',last_name) AS name, staff_id FROM staff WHERE status='active' ORDER BY first_name")->fetchAll(PDO::FETCH_ASSOC);
 $subjects = $pdo->query("SELECT id, name, code FROM subjects WHERE status='active' ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
@@ -21,16 +28,18 @@ $B = BASE_URL;
 <div class="page-header"><div><h1 class="page-title"><i class="bi bi-shuffle me-2" style="color:var(--olive)"></i>Staff Subject Allocations</h1></div></div>
 <?php if (isset($_SESSION['flash'])): ?><div class="alert alert-success flash-msg"><?php echo $_SESSION['flash']; unset($_SESSION['flash']); ?></div><?php endif; ?>
 <div class="row g-4">
-    <div class="col-md-4"><div class="card"><div class="card-header"><h6 class="mb-0">New Allocation</h6></div><div class="card-body">
-        <form method="POST">
-            <div class="mb-3"><label class="form-label">Staff *</label><select name="staff_id" class="form-select" required><option value="">Select Staff</option><?php foreach ($staff as $s): ?><option value="<?php echo $s['id']; ?>"><?php echo htmlspecialchars($s['name'].' ('.$s['staff_id'].')'); ?></option><?php endforeach; ?></select></div>
-            <div class="mb-3"><label class="form-label">Subject *</label><select name="subject_id" class="form-select" required><option value="">Select Subject</option><?php foreach ($subjects as $s): ?><option value="<?php echo $s['id']; ?>"><?php echo htmlspecialchars($s['code'].' - '.$s['name']); ?></option><?php endforeach; ?></select></div>
-            <div class="mb-3"><label class="form-label">Batch</label><select name="batch_id" class="form-select"><option value="">All Batches</option><?php foreach ($batches as $b): ?><option value="<?php echo $b['id']; ?>"><?php echo htmlspecialchars($b['batch_code']); ?></option><?php endforeach; ?></select></div>
-            <div class="mb-3"><label class="form-label">Academic Year</label><input type="text" name="academic_year" class="form-control" value="<?php echo date('Y').'-'.date('Y',strtotime('+1 year')); ?>" required></div>
-            <div class="mb-3"><label class="form-label">Semester</label><select name="semester" class="form-select"><?php for ($i=1;$i<=8;$i++): ?><option value="<?php echo $i; ?>">Sem <?php echo $i; ?></option><?php endfor; ?></select></div>
-            <div class="mb-3"><label class="form-label">Type</label><select name="allocation_type" class="form-select"><option value="theory">Theory</option><option value="practical">Practical</option><option value="tutorial">Tutorial</option></select></div>
-            <div class="mb-3"><label class="form-label">Hours/Week</label><input type="number" name="hours_per_week" class="form-control" value="3"></div>
-            <button type="submit" class="btn btn-olive w-100">Save Allocation</button>
+    <div class="col-md-4"><div class="card"><div class="card-header"><h6 class="mb-0" id="form-title">New Allocation</h6></div><div class="card-body">
+        <form method="POST" id="allocation-form">
+            <input type="hidden" name="edit_id" id="edit-id">
+            <div class="mb-3"><label class="form-label">Staff *</label><select name="staff_id" id="staff_id" class="form-select" required><option value="">Select Staff</option><?php foreach ($staff as $s): ?><option value="<?php echo $s['id']; ?>"><?php echo htmlspecialchars($s['name'].' ('.$s['staff_id'].')'); ?></option><?php endforeach; ?></select></div>
+            <div class="mb-3"><label class="form-label">Subject *</label><select name="subject_id" id="subject_id" class="form-select" required><option value="">Select Subject</option><?php foreach ($subjects as $s): ?><option value="<?php echo $s['id']; ?>"><?php echo htmlspecialchars($s['code'].' - '.$s['name']); ?></option><?php endforeach; ?></select></div>
+            <div class="mb-3"><label class="form-label">Batch</label><select name="batch_id" id="batch_id" class="form-select"><option value="">All Batches</option><?php foreach ($batches as $b): ?><option value="<?php echo $b['id']; ?>"><?php echo htmlspecialchars($b['batch_code']); ?></option><?php endforeach; ?></select></div>
+            <div class="mb-3"><label class="form-label">Academic Year</label><input type="text" name="academic_year" id="academic_year" class="form-control" value="<?php echo date('Y').'-'.date('Y',strtotime('+1 year')); ?>" required></div>
+            <div class="mb-3"><label class="form-label">Semester</label><select name="semester" id="semester" class="form-select"><?php for ($i=1;$i<=8;$i++): ?><option value="<?php echo $i; ?>">Sem <?php echo $i; ?></option><?php endfor; ?></select></div>
+            <div class="mb-3"><label class="form-label">Type</label><select name="allocation_type" id="allocation_type" class="form-select"><option value="theory">Theory</option><option value="practical">Practical</option><option value="tutorial">Tutorial</option></select></div>
+            <div class="mb-3"><label class="form-label">Hours/Week</label><input type="number" name="hours_per_week" id="hours_per_week" class="form-control" value="3"></div>
+            <button type="submit" class="btn btn-olive w-100" id="submit-btn">Save Allocation</button>
+            <button type="button" class="btn btn-outline-secondary w-100 mt-2 d-none" id="cancel-btn">Cancel Edit</button>
         </form>
     </div></div></div>
     <div class="col-md-8"><div class="card"><div class="card-header"><h6 class="mb-0">All Allocations <span class="badge bg-secondary"><?php echo count($rows); ?></span></h6></div>
@@ -39,9 +48,57 @@ $B = BASE_URL;
             <tbody>
             <?php if ($rows): foreach ($rows as $i => $r): ?>
                 <tr><td><?php echo $i+1; ?></td><td><?php echo htmlspecialchars($r['staff_name'].' ('.$r['sid'].')'); ?></td><td><?php echo htmlspecialchars($r['sub_code'].' - '.$r['subject_name']); ?></td><td><?php echo htmlspecialchars($r['batch_code']??'All'); ?></td><td><?php echo $r['academic_year']; ?></td><td><?php echo $r['semester']; ?></td><td><?php echo ucfirst($r['allocation_type']); ?></td><td><?php echo $r['hours_per_week']; ?></td>
-                <td><a href="?page=staff-allocations&action=delete&id=<?php echo $r['id']; ?>" class="btn btn-sm btn-outline-danger confirm-delete"><i class="bi bi-trash"></i></a></td></tr>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary edit-btn" 
+                        data-id="<?php echo $r['id']; ?>" 
+                        data-staff_id="<?php echo $r['staff_id']; ?>" 
+                        data-subject_id="<?php echo $r['subject_id']; ?>" 
+                        data-batch_id="<?php echo $r['batch_id']; ?>" 
+                        data-academic_year="<?php echo htmlspecialchars($r['academic_year']); ?>" 
+                        data-semester="<?php echo $r['semester']; ?>" 
+                        data-allocation_type="<?php echo $r['allocation_type']; ?>" 
+                        data-hours_per_week="<?php echo $r['hours_per_week']; ?>"><i class="bi bi-pencil"></i></button>
+                    <a href="?page=staff-allocations&action=delete&id=<?php echo $r['id']; ?>" class="btn btn-sm btn-outline-danger confirm-delete"><i class="bi bi-trash"></i></a>
+                </td></tr>
             <?php endforeach; else: ?><tr><td colspan="9" class="text-center py-4 text-muted">No allocations.</td></tr><?php endif; ?>
             </tbody>
         </table></div></div>
     </div></div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editBtns = document.querySelectorAll('.edit-btn');
+    const form = document.getElementById('allocation-form');
+    const formTitle = document.getElementById('form-title');
+    const submitBtn = document.getElementById('submit-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const d = this.dataset;
+            document.getElementById('edit-id').value = d.id;
+            document.getElementById('staff_id').value = d.staff_id;
+            document.getElementById('subject_id').value = d.subject_id;
+            document.getElementById('batch_id').value = d.batch_id || "";
+            document.getElementById('academic_year').value = d.academic_year;
+            document.getElementById('semester').value = d.semester;
+            document.getElementById('allocation_type').value = d.allocation_type;
+            document.getElementById('hours_per_week').value = d.hours_per_week;
+            
+            formTitle.textContent = 'Edit Allocation';
+            submitBtn.textContent = 'Update Allocation';
+            cancelBtn.classList.remove('d-none');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+    
+    cancelBtn.addEventListener('click', function() {
+        form.reset();
+        document.getElementById('edit-id').value = '';
+        formTitle.textContent = 'New Allocation';
+        submitBtn.textContent = 'Save Allocation';
+        this.classList.add('d-none');
+    });
+});
+</script>

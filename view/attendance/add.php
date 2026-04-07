@@ -12,25 +12,25 @@ if ($batch_id) {
     $stmt->execute([(int)$batch_id]);
     $students_for_batch = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['attendance'])) {
     $date       = $_POST['attendance_date'];
     $subject_id = $_POST['subject_id'] ?: null;
     $batch_id_s = (int)$_POST['batch_id'];
+    $session_id = $_POST['session_id'] ?? null;
     foreach ($_POST['attendance'] as $student_id => $status) {
+        $remarks = $_POST['remarks'][$student_id] ?? '';
         // Upsert
-        $existing = $pdo->prepare("SELECT id FROM attendance WHERE student_id=? AND attendance_date=? AND subject_id<=>?");
-        $existing->execute([(int)$student_id, $date, $subject_id]);
+        $existing = $pdo->prepare("SELECT id FROM attendance WHERE student_id=? AND attendance_date=? AND subject_id<=>? AND session_id<=>?");
+        $existing->execute([(int)$student_id, $date, $subject_id, $session_id]);
         if ($existing->fetch()) {
-            $pdo->prepare("UPDATE attendance SET status=?, batch_id=? WHERE student_id=? AND attendance_date=? AND subject_id<=>?")
-                ->execute([$status, $batch_id_s, (int)$student_id, $date, $subject_id]);
+            $pdo->prepare("UPDATE attendance SET status=?, remarks=?, batch_id=? WHERE student_id=? AND attendance_date=? AND subject_id<=>? AND session_id<=>?")
+                ->execute([$status, $remarks, $batch_id_s, (int)$student_id, $date, $subject_id, $session_id]);
         } else {
-            $pdo->prepare("INSERT INTO attendance (student_id,subject_id,batch_id,attendance_date,status,marked_by) VALUES (?,?,?,?,?,?)")
-                ->execute([(int)$student_id, $subject_id, $batch_id_s, $date, $status, $_SESSION['user_id']]);
+            $pdo->prepare("INSERT INTO attendance (student_id,subject_id,session_id,batch_id,attendance_date,status,remarks,marked_by) VALUES (?,?,?,?,?,?,?,?)")
+                ->execute([(int)$student_id, $subject_id, $session_id, $batch_id_s, $date, $status, $remarks, $_SESSION['user_id']]);
         }
     }
-    logActivity($pdo, 'Mark Attendance', 'Attendance', "Marked attendance for batch ID: $batch_id_s on $date");
-    $_SESSION['flash'] = 'Attendance saved for '.count($_POST['attendance']).' students.';
+    $_SESSION['flash'] = 'Attendance saved successfully.';
     header('Location: '.BASE_URL.'/index.php?page=attendance-tracking'); exit;
 }
 $B = BASE_URL;
@@ -47,11 +47,12 @@ $B = BASE_URL;
     <input type="hidden" name="batch_id" value="<?php echo $batch_id; ?>">
     <div class="card mb-4"><div class="card-body">
         <div class="row g-3">
-            <div class="col-md-4"><label class="form-label">Attendance Date *</label><input type="date" name="attendance_date" class="form-control" value="<?php echo date('Y-m-d'); ?>" required></div>
-            <div class="col-md-4"><label class="form-label">Subject</label><select name="subject_id" class="form-select"><option value="">General / No Subject</option><?php foreach ($subjects as $s): ?><option value="<?php echo $s['id']; ?>"><?php echo htmlspecialchars($s['code'].' - '.$s['name']); ?></option><?php endforeach; ?></select></div>
+            <div class="col-md-3"><label class="form-label">Attendance Date *</label><input type="date" name="attendance_date" class="form-control" value="<?php echo date('Y-m-d'); ?>" required></div>
+            <div class="col-md-3"><label class="form-label">Subject</label><select name="subject_id" class="form-select"><option value="">General / No Subject</option><?php foreach ($subjects as $s): ?><option value="<?php echo $s['id']; ?>"><?php echo htmlspecialchars($s['code'].' - '.$s['name']); ?></option><?php endforeach; ?></select></div>
+            <div class="col-md-2"><label class="form-label">Session</label><select name="session_id" class="form-select"><option value="1">Session 1</option><option value="2">Session 2</option><option value="3">Session 3</option></select></div>
             <div class="col-md-4 d-flex align-items-end gap-2">
-                <button type="button" class="btn btn-sm btn-outline-success" onclick="setAll('present')">All Present</button>
-                <button type="button" class="btn btn-sm btn-outline-danger" onclick="setAll('absent')">All Absent</button>
+                <button type="button" class="btn btn-sm btn-outline-success" onclick="setAll('present')"><i class="bi bi-check-all me-1"></i>All Present</button>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="setAll('absent')"><i class="bi bi-x-all me-1"></i>All Absent</button>
             </div>
         </div>
     </div></div>
@@ -65,13 +66,14 @@ $B = BASE_URL;
                 <td><code><?php echo htmlspecialchars($s['admission_number']); ?></code></td>
                 <td><?php echo htmlspecialchars($s['first_name'].' '.$s['last_name']); ?></td>
                 <td>
-                    <div class="d-flex gap-2">
-                        <?php foreach (['present'=>'outline-success','absent'=>'outline-danger','late'=>'outline-warning','excused'=>'outline-secondary'] as $status => $variant): ?>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input attendance-radio" type="radio" name="attendance[<?php echo $s['id']; ?>]" id="att_<?php echo $s['id'].'_'.$status; ?>" value="<?php echo $status; ?>" <?php echo $status==='present'?'checked':''; ?>>
-                            <label class="form-check-label" for="att_<?php echo $s['id'].'_'.$status; ?>"><?php echo ucfirst($status); ?></label>
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <?php foreach (['present'=>'success','absent'=>'danger','late'=>'warning','half_day'=>'info','excused'=>'secondary'] as $status => $variant): ?>
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check attendance-radio" name="attendance[<?php echo $s['id']; ?>]" id="att_<?php echo $s['id'].'_'.$status; ?>" value="<?php echo $status; ?>" <?php echo $status==='present'?'checked':''; ?>>
+                            <label class="btn btn-sm btn-outline-<?php echo $variant; ?>" for="att_<?php echo $s['id'].'_'.$status; ?>"><?php echo ucfirst(str_replace('_',' ',$status)); ?></label>
                         </div>
                         <?php endforeach; ?>
+                        <input type="text" name="remarks[<?php echo $s['id']; ?>]" class="form-control form-control-sm ms-2" placeholder="Remarks..." style="max-width:150px">
                     </div>
                 </td>
             </tr>

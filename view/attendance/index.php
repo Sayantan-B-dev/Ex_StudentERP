@@ -12,7 +12,7 @@ if ($batch_filter) { $where .= " AND a.batch_id=?"; $params[] = $batch_filter; }
 
 $stmt = $pdo->prepare("SELECT a.*, CONCAT(s.first_name,' ',s.last_name) AS student_name, s.admission_number, sub.name AS subject_name, b.batch_code FROM attendance a
     JOIN students s ON a.student_id=s.id LEFT JOIN subjects sub ON a.subject_id=sub.id LEFT JOIN academic_batches b ON a.batch_id=b.id
-    $where ORDER BY a.attendance_date DESC LIMIT 100");
+    $where ORDER BY a.attendance_date DESC, a.created_at DESC");
 $stmt->execute($params);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -21,6 +21,19 @@ $present = count(array_filter($rows, fn($r) => $r['status']==='present'));
 $absent  = count(array_filter($rows, fn($r) => $r['status']==='absent'));
 $late    = count(array_filter($rows, fn($r) => $r['status']==='late'));
 $B = BASE_URL;
+
+// Batch Report Logic
+if (isset($_GET['download']) && $batch_filter) {
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="Attendance_Batch_'.$batch_filter.'_'.date('Y-m-d').'.csv"');
+    $out = fopen('php://output', 'w');
+    fputcsv($out, ['Date', 'Adm No', 'Student', 'Subject', 'Status', 'Remarks']);
+    foreach ($rows as $r) {
+        fputcsv($out, [$r['attendance_date'], $r['admission_number'], $r['student_name'], $r['subject_name']??'N/A', $r['status'], $r['remarks']??'']);
+    }
+    fclose($out);
+    exit;
+}
 ?>
 <div class="page-header">
     <div><h1 class="page-title"><i class="bi bi-calendar-check me-2" style="color:var(--olive)"></i>Attendance Tracking</h1></div>
@@ -28,7 +41,7 @@ $B = BASE_URL;
 </div>
 <!-- Stats -->
 <div class="row g-3 mb-4">
-    <div class="col-md-3"><div class="stat-card" style="background:var(--olive)"><div><h6>Total Records</h6><h2><?php echo $total; ?></h2><small>Today's date</small></div><i class="bi bi-calendar-check-fill stat-icon"></i></div></div>
+    <div class="col-md-3"><div class="stat-card" style="background:var(--olive)"><div><h6>Total Records</h6><h2><?php echo $total; ?></h2></div><i class="bi bi-person-lines-fill stat-icon"></i></div></div>
     <div class="col-md-3"><div class="stat-card" style="background:#27ae60"><div><h6>Present</h6><h2><?php echo $present; ?></h2></div><i class="bi bi-check-circle-fill stat-icon"></i></div></div>
     <div class="col-md-3"><div class="stat-card" style="background:var(--maroon)"><div><h6>Absent</h6><h2><?php echo $absent; ?></h2></div><i class="bi bi-x-circle-fill stat-icon"></i></div></div>
     <div class="col-md-3"><div class="stat-card" style="background:#f39c12"><div><h6>Late</h6><h2><?php echo $late; ?></h2></div><i class="bi bi-clock-fill stat-icon"></i></div></div>
@@ -39,7 +52,14 @@ $B = BASE_URL;
         <input type="hidden" name="page" value="attendance-tracking">
         <div class="col-md-3"><label class="form-label">Date</label><input type="date" name="date" class="form-control" value="<?php echo htmlspecialchars($date_filter); ?>"></div>
         <div class="col-md-3"><label class="form-label">Batch</label><select name="batch_id" class="form-select"><option value="">All Batches</option><?php foreach ($batches as $b): ?><option value="<?php echo $b['id']; ?>" <?php echo $batch_filter==$b['id']?'selected':''; ?>><?php echo htmlspecialchars($b['batch_code']); ?></option><?php endforeach; ?></select></div>
-        <div class="col-md-2"><button class="btn btn-olive w-100">Filter</button></div>
+        <div class="col-md-2"><button type="submit" class="btn btn-olive w-100"><i class="bi bi-funnel me-1"></i>Filter</button></div>
+        <div class="col-md-2">
+            <?php if ($batch_filter): ?>
+            <button type="submit" name="download" value="1" class="btn btn-outline-success w-100"><i class="bi bi-download me-1"></i>Report</button>
+            <?php else: ?>
+            <button type="button" class="btn btn-outline-secondary w-100" disabled title="Select a batch to download report"><i class="bi bi-download me-1"></i>Report</button>
+            <?php endif; ?>
+        </div>
         <div class="col-md-2"><a href="<?php echo $B; ?>/index.php?page=attendance-tracking" class="btn btn-outline-secondary w-100">Reset</a></div>
     </form>
 </div></div>

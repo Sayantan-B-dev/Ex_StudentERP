@@ -68,17 +68,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── Table search ────────────────────────────────────────────────────────
+    // ── Table search & filter ───────────────────────────────────────────────
     const searchInput = document.getElementById('tableSearch');
-    if (searchInput) {
-        searchInput.addEventListener('keyup', function () {
-            const q   = this.value.toLowerCase();
-            const rows = document.querySelectorAll('table tbody tr');
-            rows.forEach(function (row) {
-                row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
-            });
+    const filterSelect = document.getElementById('tableFilter');
+
+    function applyTableFilters() {
+        const q = searchInput ? searchInput.value.toLowerCase() : '';
+        const f = filterSelect ? filterSelect.value.toLowerCase() : '';
+        const rows = document.querySelectorAll('table tbody tr');
+
+        rows.forEach(function (row) {
+            const text = row.textContent.toLowerCase();
+            const matchesSearch = text.includes(q);
+            
+            let matchesFilter = true;
+            if (f !== '') {
+                // simple word boundary match, so "inactive" doesn't falsely match "active"
+                const regex = new RegExp('\\b' + f + '\\b');
+                matchesFilter = regex.test(text);
+            }
+            
+            row.style.display = (matchesSearch && matchesFilter) ? '' : 'none';
         });
     }
+
+    if (searchInput) searchInput.addEventListener('keyup', applyTableFilters);
+    if (filterSelect) filterSelect.addEventListener('change', applyTableFilters);
 
     // ── Form Validation Feedback ──────────────────────────────────────────
     const forms = document.querySelectorAll('form');

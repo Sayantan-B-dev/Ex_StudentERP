@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 18, 2026 at 01:27 PM
+-- Generation Time: Apr 05, 2026 at 05:45 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -104,8 +104,10 @@ CREATE TABLE `attendance` (
   `student_id` int(11) NOT NULL,
   `subject_id` int(11) DEFAULT NULL,
   `batch_id` int(11) NOT NULL,
+  `session_id` int(11) DEFAULT 1,
   `attendance_date` date NOT NULL,
   `status` enum('present','absent','late','half_day') DEFAULT 'present',
+  `remarks` text DEFAULT NULL,
   `marked_by` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -114,97 +116,100 @@ CREATE TABLE `attendance` (
 -- Dumping data for table `attendance`
 --
 
-INSERT INTO `attendance` (`id`, `student_id`, `subject_id`, `batch_id`, `attendance_date`, `status`, `marked_by`, `created_at`) VALUES
-(1, 1, 1, 1, '2025-02-03', 'present', 1, '2026-03-18 10:43:07'),
-(2, 1, 1, 1, '2025-02-05', 'present', 1, '2026-03-18 10:43:07'),
-(3, 1, 1, 1, '2025-02-07', 'late', 1, '2026-03-18 10:43:07'),
-(4, 1, 4, 1, '2025-02-04', 'present', 1, '2026-03-18 10:43:07'),
-(5, 1, 4, 1, '2025-02-06', 'absent', 1, '2026-03-18 10:43:07'),
-(6, 1, 4, 1, '2025-02-08', 'present', 1, '2026-03-18 10:43:07'),
-(7, 1, 10, 1, '2025-02-09', 'present', 1, '2026-03-18 10:43:07'),
-(8, 1, 10, 1, '2025-02-10', 'half_day', 1, '2026-03-18 10:43:07'),
-(9, 1, 10, 1, '2025-02-12', 'present', 1, '2026-03-18 10:43:07'),
-(10, 1, 1, 1, '2025-02-14', 'present', 1, '2026-03-18 10:43:07'),
-(11, 2, 1, 1, '2025-02-03', 'present', 1, '2026-03-18 10:43:07'),
-(12, 2, 1, 1, '2025-02-05', 'present', 1, '2026-03-18 10:43:07'),
-(13, 2, 1, 1, '2025-02-07', 'present', 1, '2026-03-18 10:43:07'),
-(14, 2, 4, 1, '2025-02-04', 'present', 1, '2026-03-18 10:43:07'),
-(15, 2, 4, 1, '2025-02-06', 'present', 1, '2026-03-18 10:43:07'),
-(16, 2, 4, 1, '2025-02-08', 'late', 1, '2026-03-18 10:43:07'),
-(17, 2, 10, 1, '2025-02-09', 'present', 1, '2026-03-18 10:43:07'),
-(18, 2, 10, 1, '2025-02-10', 'present', 1, '2026-03-18 10:43:07'),
-(19, 2, 10, 1, '2025-02-12', 'absent', 1, '2026-03-18 10:43:07'),
-(20, 2, 1, 1, '2025-02-14', 'present', 1, '2026-03-18 10:43:07'),
-(21, 3, 1, 1, '2025-02-03', 'present', 1, '2026-03-18 10:43:07'),
-(22, 3, 1, 1, '2025-02-05', 'half_day', 1, '2026-03-18 10:43:07'),
-(23, 3, 1, 1, '2025-02-07', 'present', 1, '2026-03-18 10:43:07'),
-(24, 3, 4, 1, '2025-02-04', 'present', 1, '2026-03-18 10:43:07'),
-(25, 3, 4, 1, '2025-02-06', 'present', 1, '2026-03-18 10:43:07'),
-(26, 3, 4, 1, '2025-02-08', 'present', 1, '2026-03-18 10:43:07'),
-(27, 3, 10, 1, '2025-02-09', 'late', 1, '2026-03-18 10:43:07'),
-(28, 3, 10, 1, '2025-02-10', 'present', 1, '2026-03-18 10:43:07'),
-(29, 3, 10, 1, '2025-02-12', 'present', 1, '2026-03-18 10:43:07'),
-(30, 3, 1, 1, '2025-02-14', 'present', 1, '2026-03-18 10:43:07'),
-(31, 4, 2, 2, '2025-02-03', 'present', 2, '2026-03-18 10:43:07'),
-(32, 4, 2, 2, '2025-02-05', 'present', 2, '2026-03-18 10:43:07'),
-(33, 4, 2, 2, '2025-02-07', 'present', 2, '2026-03-18 10:43:07'),
-(34, 4, 5, 2, '2025-02-04', 'absent', 2, '2026-03-18 10:43:07'),
-(35, 4, 5, 2, '2025-02-06', 'present', 2, '2026-03-18 10:43:07'),
-(36, 4, 5, 2, '2025-02-08', 'present', 2, '2026-03-18 10:43:07'),
-(37, 4, 11, 2, '2025-02-09', 'present', 2, '2026-03-18 10:43:07'),
-(38, 4, 11, 2, '2025-02-10', 'present', 2, '2026-03-18 10:43:07'),
-(39, 4, 11, 2, '2025-02-12', 'late', 2, '2026-03-18 10:43:07'),
-(40, 4, 2, 2, '2025-02-14', 'present', 2, '2026-03-18 10:43:07'),
-(41, 5, 2, 2, '2025-02-03', 'present', 2, '2026-03-18 10:43:07'),
-(42, 5, 2, 2, '2025-02-05', 'present', 2, '2026-03-18 10:43:07'),
-(43, 5, 2, 2, '2025-02-07', 'present', 2, '2026-03-18 10:43:07'),
-(44, 5, 5, 2, '2025-02-04', 'present', 2, '2026-03-18 10:43:07'),
-(45, 5, 5, 2, '2025-02-06', 'half_day', 2, '2026-03-18 10:43:07'),
-(46, 5, 5, 2, '2025-02-08', 'present', 2, '2026-03-18 10:43:07'),
-(47, 5, 11, 2, '2025-02-09', 'present', 2, '2026-03-18 10:43:07'),
-(48, 5, 11, 2, '2025-02-10', 'present', 2, '2026-03-18 10:43:07'),
-(49, 5, 11, 2, '2025-02-12', 'present', 2, '2026-03-18 10:43:07'),
-(50, 5, 2, 2, '2025-02-14', 'present', 2, '2026-03-18 10:43:07'),
-(51, 6, 2, 2, '2025-02-03', 'present', 2, '2026-03-18 10:43:07'),
-(52, 6, 2, 2, '2025-02-05', 'late', 2, '2026-03-18 10:43:07'),
-(53, 6, 2, 2, '2025-02-07', 'present', 2, '2026-03-18 10:43:07'),
-(54, 6, 5, 2, '2025-02-04', 'present', 2, '2026-03-18 10:43:07'),
-(55, 6, 5, 2, '2025-02-06', 'present', 2, '2026-03-18 10:43:07'),
-(56, 6, 5, 2, '2025-02-08', 'present', 2, '2026-03-18 10:43:07'),
-(57, 6, 11, 2, '2025-02-09', 'absent', 2, '2026-03-18 10:43:07'),
-(58, 6, 11, 2, '2025-02-10', 'present', 2, '2026-03-18 10:43:07'),
-(59, 6, 11, 2, '2025-02-12', 'present', 2, '2026-03-18 10:43:07'),
-(60, 6, 2, 2, '2025-02-14', 'present', 2, '2026-03-18 10:43:07'),
-(61, 7, 3, 3, '2025-02-03', 'present', 3, '2026-03-18 10:43:07'),
-(62, 7, 3, 3, '2025-02-05', 'present', 3, '2026-03-18 10:43:07'),
-(63, 7, 3, 3, '2025-02-07', 'present', 3, '2026-03-18 10:43:07'),
-(64, 7, 6, 3, '2025-02-04', 'late', 3, '2026-03-18 10:43:07'),
-(65, 7, 6, 3, '2025-02-06', 'present', 3, '2026-03-18 10:43:07'),
-(66, 7, 6, 3, '2025-02-08', 'present', 3, '2026-03-18 10:43:07'),
-(67, 7, 12, 3, '2025-02-09', 'present', 3, '2026-03-18 10:43:07'),
-(68, 7, 12, 3, '2025-02-10', 'present', 3, '2026-03-18 10:43:07'),
-(69, 7, 12, 3, '2025-02-12', 'present', 3, '2026-03-18 10:43:07'),
-(70, 7, 3, 3, '2025-02-14', 'half_day', 3, '2026-03-18 10:43:07'),
-(71, 8, 3, 3, '2025-02-03', 'present', 3, '2026-03-18 10:43:07'),
-(72, 8, 3, 3, '2025-02-05', 'present', 3, '2026-03-18 10:43:07'),
-(73, 8, 3, 3, '2025-02-07', 'absent', 3, '2026-03-18 10:43:07'),
-(74, 8, 6, 3, '2025-02-04', 'present', 3, '2026-03-18 10:43:07'),
-(75, 8, 6, 3, '2025-02-06', 'present', 3, '2026-03-18 10:43:07'),
-(76, 8, 6, 3, '2025-02-08', 'present', 3, '2026-03-18 10:43:07'),
-(77, 8, 12, 3, '2025-02-09', 'present', 3, '2026-03-18 10:43:07'),
-(78, 8, 12, 3, '2025-02-10', 'present', 3, '2026-03-18 10:43:07'),
-(79, 8, 12, 3, '2025-02-12', 'present', 3, '2026-03-18 10:43:07'),
-(80, 8, 3, 3, '2025-02-14', 'present', 3, '2026-03-18 10:43:07'),
-(81, 9, 3, 3, '2025-02-03', 'present', 3, '2026-03-18 10:43:07'),
-(82, 9, 3, 3, '2025-02-05', 'present', 3, '2026-03-18 10:43:07'),
-(83, 9, 3, 3, '2025-02-07', 'present', 3, '2026-03-18 10:43:07'),
-(84, 9, 6, 3, '2025-02-04', 'present', 3, '2026-03-18 10:43:07'),
-(85, 9, 6, 3, '2025-02-06', 'present', 3, '2026-03-18 10:43:07'),
-(86, 9, 6, 3, '2025-02-08', 'late', 3, '2026-03-18 10:43:07'),
-(87, 9, 12, 3, '2025-02-09', 'present', 3, '2026-03-18 10:43:07'),
-(88, 9, 12, 3, '2025-02-10', 'present', 3, '2026-03-18 10:43:07'),
-(89, 9, 12, 3, '2025-02-12', 'present', 3, '2026-03-18 10:43:07'),
-(90, 9, 3, 3, '2025-02-14', 'present', 3, '2026-03-18 10:43:07');
+INSERT INTO `attendance` (`id`, `student_id`, `subject_id`, `batch_id`, `session_id`, `attendance_date`, `status`, `remarks`, `marked_by`, `created_at`) VALUES
+(1, 1, 1, 1, 1, '2025-02-03', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(2, 1, 1, 1, 1, '2025-02-05', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(3, 1, 1, 1, 1, '2025-02-07', 'late', NULL, 1, '2026-03-18 10:43:07'),
+(4, 1, 4, 1, 1, '2025-02-04', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(5, 1, 4, 1, 1, '2025-02-06', 'absent', NULL, 1, '2026-03-18 10:43:07'),
+(6, 1, 4, 1, 1, '2025-02-08', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(7, 1, 10, 1, 1, '2025-02-09', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(8, 1, 10, 1, 1, '2025-02-10', 'half_day', NULL, 1, '2026-03-18 10:43:07'),
+(9, 1, 10, 1, 1, '2025-02-12', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(10, 1, 1, 1, 1, '2025-02-14', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(11, 2, 1, 1, 1, '2025-02-03', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(12, 2, 1, 1, 1, '2025-02-05', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(13, 2, 1, 1, 1, '2025-02-07', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(14, 2, 4, 1, 1, '2025-02-04', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(15, 2, 4, 1, 1, '2025-02-06', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(16, 2, 4, 1, 1, '2025-02-08', 'late', NULL, 1, '2026-03-18 10:43:07'),
+(17, 2, 10, 1, 1, '2025-02-09', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(18, 2, 10, 1, 1, '2025-02-10', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(19, 2, 10, 1, 1, '2025-02-12', 'absent', NULL, 1, '2026-03-18 10:43:07'),
+(20, 2, 1, 1, 1, '2025-02-14', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(21, 3, 1, 1, 1, '2025-02-03', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(22, 3, 1, 1, 1, '2025-02-05', 'half_day', NULL, 1, '2026-03-18 10:43:07'),
+(23, 3, 1, 1, 1, '2025-02-07', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(24, 3, 4, 1, 1, '2025-02-04', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(25, 3, 4, 1, 1, '2025-02-06', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(26, 3, 4, 1, 1, '2025-02-08', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(27, 3, 10, 1, 1, '2025-02-09', 'late', NULL, 1, '2026-03-18 10:43:07'),
+(28, 3, 10, 1, 1, '2025-02-10', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(29, 3, 10, 1, 1, '2025-02-12', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(30, 3, 1, 1, 1, '2025-02-14', 'present', NULL, 1, '2026-03-18 10:43:07'),
+(31, 4, 2, 2, 1, '2025-02-03', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(32, 4, 2, 2, 1, '2025-02-05', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(33, 4, 2, 2, 1, '2025-02-07', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(34, 4, 5, 2, 1, '2025-02-04', 'absent', NULL, 2, '2026-03-18 10:43:07'),
+(35, 4, 5, 2, 1, '2025-02-06', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(36, 4, 5, 2, 1, '2025-02-08', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(37, 4, 11, 2, 1, '2025-02-09', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(38, 4, 11, 2, 1, '2025-02-10', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(39, 4, 11, 2, 1, '2025-02-12', 'late', NULL, 2, '2026-03-18 10:43:07'),
+(40, 4, 2, 2, 1, '2025-02-14', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(41, 5, 2, 2, 1, '2025-02-03', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(42, 5, 2, 2, 1, '2025-02-05', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(43, 5, 2, 2, 1, '2025-02-07', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(44, 5, 5, 2, 1, '2025-02-04', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(45, 5, 5, 2, 1, '2025-02-06', 'half_day', NULL, 2, '2026-03-18 10:43:07'),
+(46, 5, 5, 2, 1, '2025-02-08', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(47, 5, 11, 2, 1, '2025-02-09', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(48, 5, 11, 2, 1, '2025-02-10', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(49, 5, 11, 2, 1, '2025-02-12', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(50, 5, 2, 2, 1, '2025-02-14', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(51, 6, 2, 2, 1, '2025-02-03', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(52, 6, 2, 2, 1, '2025-02-05', 'late', NULL, 2, '2026-03-18 10:43:07'),
+(53, 6, 2, 2, 1, '2025-02-07', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(54, 6, 5, 2, 1, '2025-02-04', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(55, 6, 5, 2, 1, '2025-02-06', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(56, 6, 5, 2, 1, '2025-02-08', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(57, 6, 11, 2, 1, '2025-02-09', 'absent', NULL, 2, '2026-03-18 10:43:07'),
+(58, 6, 11, 2, 1, '2025-02-10', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(59, 6, 11, 2, 1, '2025-02-12', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(60, 6, 2, 2, 1, '2025-02-14', 'present', NULL, 2, '2026-03-18 10:43:07'),
+(61, 7, 3, 3, 1, '2025-02-03', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(62, 7, 3, 3, 1, '2025-02-05', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(63, 7, 3, 3, 1, '2025-02-07', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(64, 7, 6, 3, 1, '2025-02-04', 'late', NULL, 3, '2026-03-18 10:43:07'),
+(65, 7, 6, 3, 1, '2025-02-06', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(66, 7, 6, 3, 1, '2025-02-08', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(67, 7, 12, 3, 1, '2025-02-09', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(68, 7, 12, 3, 1, '2025-02-10', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(69, 7, 12, 3, 1, '2025-02-12', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(70, 7, 3, 3, 1, '2025-02-14', 'half_day', NULL, 3, '2026-03-18 10:43:07'),
+(71, 8, 3, 3, 1, '2025-02-03', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(72, 8, 3, 3, 1, '2025-02-05', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(73, 8, 3, 3, 1, '2025-02-07', 'absent', NULL, 3, '2026-03-18 10:43:07'),
+(74, 8, 6, 3, 1, '2025-02-04', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(75, 8, 6, 3, 1, '2025-02-06', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(76, 8, 6, 3, 1, '2025-02-08', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(77, 8, 12, 3, 1, '2025-02-09', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(78, 8, 12, 3, 1, '2025-02-10', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(79, 8, 12, 3, 1, '2025-02-12', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(80, 8, 3, 3, 1, '2025-02-14', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(81, 9, 3, 3, 1, '2025-02-03', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(82, 9, 3, 3, 1, '2025-02-05', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(83, 9, 3, 3, 1, '2025-02-07', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(84, 9, 6, 3, 1, '2025-02-04', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(85, 9, 6, 3, 1, '2025-02-06', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(86, 9, 6, 3, 1, '2025-02-08', 'late', NULL, 3, '2026-03-18 10:43:07'),
+(87, 9, 12, 3, 1, '2025-02-09', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(88, 9, 12, 3, 1, '2025-02-10', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(89, 9, 12, 3, 1, '2025-02-12', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(90, 9, 3, 3, 1, '2025-02-14', 'present', NULL, 3, '2026-03-18 10:43:07'),
+(91, 1, NULL, 1, 1, '2026-04-06', 'absent', NULL, 1, '2026-04-05 15:09:47'),
+(92, 2, NULL, 1, 1, '2026-04-06', 'present', NULL, 1, '2026-04-05 15:09:47'),
+(93, 3, NULL, 1, 1, '2026-04-06', 'present', NULL, 1, '2026-04-05 15:09:47');
 
 -- --------------------------------------------------------
 
@@ -241,7 +246,11 @@ INSERT INTO `audit_logs` (`id`, `user_id`, `action`, `module`, `details`, `ip_ad
 (12, 18, 'User Login', 'Auth', 'User logged in via email: abcf@domain.com', '::1', '2026-03-18 12:24:10'),
 (13, 18, 'Delete Fee', 'Fees', 'Deleted record for fee transaction ID: 24', '::1', '2026-03-18 12:24:20'),
 (14, 18, 'User Logout', 'Auth', '', '::1', '2026-03-18 12:24:23'),
-(15, 1, 'User Login', 'Auth', 'User logged in via email: abc@domain.com', '::1', '2026-03-18 12:24:27');
+(15, 1, 'User Login', 'Auth', 'User logged in via email: abc@domain.com', '::1', '2026-03-18 12:24:27'),
+(16, 1, 'User Login', 'Auth', 'User logged in via email: abc@domain.com', '::1', '2026-04-01 05:11:46'),
+(17, 1, 'User Login', 'Auth', 'User logged in via email: abc@domain.com', '::1', '2026-04-02 17:28:48'),
+(18, 1, 'User Login', 'Auth', 'User logged in via email: abc@domain.com', '::1', '2026-04-05 14:30:49'),
+(19, 1, 'Mark Attendance', 'Attendance', 'Marked attendance for batch ID: 1 on 2026-04-06', '::1', '2026-04-05 15:09:47');
 
 -- --------------------------------------------------------
 
@@ -474,6 +483,8 @@ CREATE TABLE `fee_transactions` (
   `semester` int(11) DEFAULT 1,
   `amount_due` decimal(10,2) NOT NULL,
   `amount_paid` decimal(10,2) NOT NULL,
+  `fine_amount` decimal(10,2) DEFAULT 0.00,
+  `payment_period` varchar(50) DEFAULT 'Monthly',
   `discount` decimal(10,2) DEFAULT 0.00,
   `late_fee` decimal(10,2) DEFAULT 0.00,
   `payment_method` varchar(50) DEFAULT 'cash',
@@ -483,6 +494,7 @@ CREATE TABLE `fee_transactions` (
   `created_by` int(11) DEFAULT NULL,
   `status` enum('paid','partial','pending','failed') DEFAULT 'paid',
   `transaction_date` date NOT NULL,
+  `due_date` date DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -490,28 +502,43 @@ CREATE TABLE `fee_transactions` (
 -- Dumping data for table `fee_transactions`
 --
 
-INSERT INTO `fee_transactions` (`id`, `student_id`, `receipt_number`, `fee_type`, `academic_year`, `semester`, `amount_due`, `amount_paid`, `discount`, `late_fee`, `payment_method`, `payment_status`, `bank_reference`, `remarks`, `created_by`, `status`, `transaction_date`, `created_at`) VALUES
-(1, 1, 'RCPT/2024/001', 'tuition', NULL, 1, 125000.00, 125000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-15', '2026-03-18 11:48:42'),
-(2, 1, 'RCPT/2025/001', 'hostel', NULL, 1, 80000.00, 80000.00, 0.00, 0.00, 'card', 'paid', NULL, NULL, NULL, 'paid', '2025-01-10', '2026-03-18 11:48:42'),
-(3, 1, 'RCPT/2025/099', 'other', NULL, 1, 15000.00, 15000.00, 0.00, 0.00, 'cash', 'paid', NULL, NULL, NULL, 'paid', '2025-01-15', '2026-03-18 11:48:42'),
-(4, 2, 'RCPT/2024/002', 'tuition', NULL, 1, 125000.00, 125000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-16', '2026-03-18 11:48:42'),
-(5, 2, 'RCPT/2025/002', 'hostel', NULL, 1, 80000.00, 80000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2025-01-11', '2026-03-18 11:48:42'),
-(6, 3, 'RCPT/2024/003', 'tuition', NULL, 1, 125000.00, 125000.00, 0.00, 0.00, 'cash', 'paid', NULL, NULL, NULL, 'paid', '2024-08-17', '2026-03-18 11:48:42'),
-(7, 3, 'RCPT/2025/003', 'hostel', NULL, 1, 80000.00, 40000.00, 0.00, 0.00, 'online', 'partial', NULL, NULL, NULL, 'paid', '2025-01-12', '2026-03-18 11:48:42'),
-(8, 4, 'RCPT/2024/004', 'tuition', NULL, 1, 120000.00, 120000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-18', '2026-03-18 11:48:42'),
-(9, 4, 'RCPT/2025/004', 'hostel', NULL, 1, 80000.00, 80000.00, 0.00, 0.00, 'card', 'paid', NULL, NULL, NULL, 'paid', '2025-01-13', '2026-03-18 11:48:42'),
-(10, 5, 'RCPT/2024/005', 'tuition', NULL, 1, 120000.00, 120000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-19', '2026-03-18 11:48:42'),
-(11, 5, 'RCPT/2025/005', 'hostel', NULL, 1, 80000.00, 80000.00, 0.00, 0.00, 'cash', 'paid', NULL, NULL, NULL, 'paid', '2025-01-14', '2026-03-18 11:48:42'),
-(12, 6, 'RCPT/2024/006', 'tuition', NULL, 1, 120000.00, 120000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-20', '2026-03-18 11:48:42'),
-(13, 6, 'RCPT/2025/006', 'hostel', NULL, 1, 80000.00, 80000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2025-01-15', '2026-03-18 11:48:42'),
-(14, 7, 'RCPT/2024/007', 'tuition', NULL, 1, 60000.00, 60000.00, 0.00, 0.00, 'cash', 'paid', NULL, NULL, NULL, 'paid', '2024-08-21', '2026-03-18 11:48:42'),
-(15, 7, 'RCPT/2025/007', 'hostel', NULL, 1, 50000.00, 50000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2025-01-16', '2026-03-18 11:48:42'),
-(16, 8, 'RCPT/2024/008', 'tuition', NULL, 1, 60000.00, 60000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-22', '2026-03-18 11:48:42'),
-(18, 9, 'RCPT/2024/009', 'tuition', NULL, 1, 60000.00, 60000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-23', '2026-03-18 11:48:42'),
-(19, 9, 'RCPT/2025/009', 'hostel', NULL, 1, 50000.00, 50000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2025-01-18', '2026-03-18 11:48:42'),
-(22, 11, 'RCPT/2025/012', 'tuition', NULL, 1, 130000.00, 130000.00, 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2025-08-11', '2026-03-18 11:48:42'),
-(23, 11, 'RCPT/2025/013', 'hostel', NULL, 1, 85000.00, 85000.00, 0.00, 0.00, 'card', 'paid', NULL, NULL, NULL, 'paid', '2025-08-11', '2026-03-18 11:48:42'),
-(25, 12, 'RCPT/2025/015', 'hostel', NULL, 1, 85000.00, 0.00, 0.00, 0.00, '', 'pending', NULL, NULL, NULL, 'paid', '2025-08-12', '2026-03-18 11:48:42');
+INSERT INTO `fee_transactions` (`id`, `student_id`, `receipt_number`, `fee_type`, `academic_year`, `semester`, `amount_due`, `amount_paid`, `fine_amount`, `payment_period`, `discount`, `late_fee`, `payment_method`, `payment_status`, `bank_reference`, `remarks`, `created_by`, `status`, `transaction_date`, `due_date`, `created_at`) VALUES
+(1, 1, 'RCPT/2024/001', 'tuition', NULL, 1, 125000.00, 125000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-15', NULL, '2026-03-18 11:48:42'),
+(2, 1, 'RCPT/2025/001', 'hostel', NULL, 1, 80000.00, 80000.00, 0.00, 'Monthly', 0.00, 0.00, 'card', 'paid', NULL, NULL, NULL, 'paid', '2025-01-10', NULL, '2026-03-18 11:48:42'),
+(3, 1, 'RCPT/2025/099', 'other', NULL, 1, 15000.00, 15000.00, 0.00, 'Monthly', 0.00, 0.00, 'cash', 'paid', NULL, NULL, NULL, 'paid', '2025-01-15', NULL, '2026-03-18 11:48:42'),
+(4, 2, 'RCPT/2024/002', 'tuition', NULL, 1, 125000.00, 125000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-16', NULL, '2026-03-18 11:48:42'),
+(5, 2, 'RCPT/2025/002', 'hostel', NULL, 1, 80000.00, 80000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2025-01-11', NULL, '2026-03-18 11:48:42'),
+(6, 3, 'RCPT/2024/003', 'tuition', NULL, 1, 125000.00, 125000.00, 0.00, 'Monthly', 0.00, 0.00, 'cash', 'paid', NULL, NULL, NULL, 'paid', '2024-08-17', NULL, '2026-03-18 11:48:42'),
+(7, 3, 'RCPT/2025/003', 'hostel', NULL, 1, 80000.00, 40000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'partial', NULL, NULL, NULL, 'paid', '2025-01-12', NULL, '2026-03-18 11:48:42'),
+(8, 4, 'RCPT/2024/004', 'tuition', NULL, 1, 120000.00, 120000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-18', NULL, '2026-03-18 11:48:42'),
+(9, 4, 'RCPT/2025/004', 'hostel', NULL, 1, 80000.00, 80000.00, 0.00, 'Monthly', 0.00, 0.00, 'card', 'paid', NULL, NULL, NULL, 'paid', '2025-01-13', NULL, '2026-03-18 11:48:42'),
+(10, 5, 'RCPT/2024/005', 'tuition', NULL, 1, 120000.00, 120000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-19', NULL, '2026-03-18 11:48:42'),
+(11, 5, 'RCPT/2025/005', 'hostel', NULL, 1, 80000.00, 80000.00, 0.00, 'Monthly', 0.00, 0.00, 'cash', 'paid', NULL, NULL, NULL, 'paid', '2025-01-14', NULL, '2026-03-18 11:48:42'),
+(12, 6, 'RCPT/2024/006', 'tuition', NULL, 1, 120000.00, 120000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-20', NULL, '2026-03-18 11:48:42'),
+(13, 6, 'RCPT/2025/006', 'hostel', NULL, 1, 80000.00, 80000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2025-01-15', NULL, '2026-03-18 11:48:42'),
+(14, 7, 'RCPT/2024/007', 'tuition', NULL, 1, 60000.00, 60000.00, 0.00, 'Monthly', 0.00, 0.00, 'cash', 'paid', NULL, NULL, NULL, 'paid', '2024-08-21', NULL, '2026-03-18 11:48:42'),
+(15, 7, 'RCPT/2025/007', 'hostel', NULL, 1, 50000.00, 50000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2025-01-16', NULL, '2026-03-18 11:48:42'),
+(16, 8, 'RCPT/2024/008', 'tuition', NULL, 1, 60000.00, 60000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-22', NULL, '2026-03-18 11:48:42'),
+(18, 9, 'RCPT/2024/009', 'tuition', NULL, 1, 60000.00, 60000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2024-08-23', NULL, '2026-03-18 11:48:42'),
+(19, 9, 'RCPT/2025/009', 'hostel', NULL, 1, 50000.00, 50000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2025-01-18', NULL, '2026-03-18 11:48:42'),
+(22, 11, 'RCPT/2025/012', 'tuition', NULL, 1, 130000.00, 130000.00, 0.00, 'Monthly', 0.00, 0.00, 'online', 'paid', NULL, NULL, NULL, 'paid', '2025-08-11', NULL, '2026-03-18 11:48:42'),
+(23, 11, 'RCPT/2025/013', 'hostel', NULL, 1, 85000.00, 85000.00, 0.00, 'Monthly', 0.00, 0.00, 'card', 'paid', NULL, NULL, NULL, 'paid', '2025-08-11', NULL, '2026-03-18 11:48:42'),
+(25, 12, 'RCPT/2025/015', 'hostel', NULL, 1, 85000.00, 0.00, 0.00, 'Monthly', 0.00, 0.00, '', 'pending', NULL, NULL, NULL, 'paid', '2025-08-12', NULL, '2026-03-18 11:48:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `holidays`
+--
+
+CREATE TABLE `holidays` (
+  `id` int(11) NOT NULL,
+  `holiday_date` date NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -658,9 +685,35 @@ CREATE TABLE `staff` (
 
 INSERT INTO `staff` (`id`, `user_id`, `staff_id`, `first_name`, `middle_name`, `last_name`, `gender`, `date_of_birth`, `email`, `phone`, `alternate_phone`, `address`, `city`, `state`, `pincode`, `category_id`, `designation_id`, `qualification`, `experience_years`, `salary`, `pan_number`, `aadhaar_number`, `joining_date`, `status`, `notes`, `created_at`, `updated_at`) VALUES
 (1, NULL, 'FAC001', 'Rajesh', 'K', 'Kumar', 'male', '1978-05-15', 'rajesh.kumar@nitdelhi.ac.in', '9876543210', '9876501234', '123 Faculty Colony', 'Delhi', 'Delhi', NULL, 1, 1, 'Ph.D. Computer Science', 0, 150000.00, NULL, NULL, '2015-07-01', 'active', NULL, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(3, NULL, 'FAC003', 'Anil', 'K', 'Gupta', 'male', '1975-11-10', 'anil.gupta@nitdelhi.ac.in', '9876543212', '9876505678', '789 Faculty Housing', 'Delhi', 'Delhi', NULL, 1, 1, 'Ph.D. Mechanical', 0, 155000.00, NULL, NULL, '2014-06-01', 'active', NULL, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(3, NULL, 'FAC003', 'Anil', 'K', 'Gupta', 'male', '1975-11-10', 'anil.gupta@nitdelhi.ac.in', '9876543212', NULL, '789 Faculty Housing', 'Delhi', 'Delhi', NULL, 1, 1, 'Ph.D. Mechanical', 2, 155000.00, NULL, NULL, '2014-06-01', 'active', '', '2026-03-18 10:43:07', '2026-04-05 15:16:07'),
 (4, NULL, 'FAC004', 'Sunita', 'R', 'Reddy', 'female', '1980-03-18', 'sunita.reddy@nitdelhi.ac.in', '9876543213', NULL, '321 Staff Quarters', 'Delhi', 'Delhi', NULL, 1, 3, 'M.Tech, Ph.D.', 0, 110000.00, NULL, NULL, '2017-09-01', 'active', NULL, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(5, 18, 'TCH2026333', 'Sayantan Bharati', NULL, '', 'male', NULL, 'abcf@domain.com', '+911234125125', NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, 0, NULL, NULL, NULL, NULL, 'active', NULL, '2026-03-18 12:06:21', '2026-03-18 12:06:21');
+(5, 18, 'TCH2026333', 'Sayantan Bharati', '', 'Bharati', 'male', '0000-00-00', 'abcf@domain.com', '+911234125125', NULL, 'West Bengle', 'kolkata', 'West Bengal', NULL, 1, 1, '', 0, 0.00, NULL, NULL, '2026-04-30', 'active', '', '2026-03-18 12:06:21', '2026-04-05 15:16:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff_activities`
+--
+
+CREATE TABLE `staff_activities` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) NOT NULL,
+  `activity_title` varchar(255) NOT NULL,
+  `activity_description` text DEFAULT NULL,
+  `activity_date` date NOT NULL,
+  `category` varchar(100) DEFAULT NULL,
+  `status` enum('pending','completed','cancelled') DEFAULT 'pending',
+  `created_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `staff_activities`
+--
+
+INSERT INTO `staff_activities` (`id`, `staff_id`, `activity_title`, `activity_description`, `activity_date`, `category`, `status`, `created_by`, `created_at`) VALUES
+(1, 1, 'Monthly Faculty Meeting', 'Discussed syllabus progress.', '2026-04-01', 'Meeting', 'completed', 1, '2026-04-05 15:44:42'),
+(2, 1, 'Workshop Prep', 'Preparing lab manuals.', '2026-04-10', 'Duties', 'pending', 1, '2026-04-05 15:44:42');
 
 -- --------------------------------------------------------
 
@@ -740,6 +793,34 @@ CREATE TABLE `staff_leave_balance` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `staff_salaries`
+--
+
+CREATE TABLE `staff_salaries` (
+  `id` int(11) NOT NULL,
+  `staff_id` int(11) NOT NULL,
+  `amount_paid` decimal(10,2) NOT NULL,
+  `bonus` decimal(10,2) DEFAULT 0.00,
+  `deductions` decimal(10,2) DEFAULT 0.00,
+  `month_year` varchar(20) NOT NULL,
+  `payment_date` date NOT NULL,
+  `payment_method` varchar(50) DEFAULT 'bank_transfer',
+  `receipt_no` varchar(50) DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `staff_salaries`
+--
+
+INSERT INTO `staff_salaries` (`id`, `staff_id`, `amount_paid`, `bonus`, `deductions`, `month_year`, `payment_date`, `payment_method`, `receipt_no`, `remarks`, `created_by`, `created_at`) VALUES
+(1, 1, 45000.00, 2000.00, 500.00, 'March 2026', '2026-03-31', 'bank_transfer', 'TXN_MARCH_001', NULL, 1, '2026-04-05 15:44:42');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `staff_subject_allocations`
 --
 
@@ -762,7 +843,8 @@ CREATE TABLE `staff_subject_allocations` (
 INSERT INTO `staff_subject_allocations` (`id`, `staff_id`, `subject_id`, `batch_id`, `academic_year`, `semester`, `allocation_type`, `hours_per_week`, `status`) VALUES
 (1, 2, 1, 4, '2026-2027', 3, 'tutorial', 5, 'active'),
 (2, 2, 9, 4, '2026-2027', 1, 'theory', 3, 'active'),
-(3, 4, 10, 0, '2026-2027', 1, 'theory', 3, 'active');
+(3, 4, 10, 0, '2026-2027', 1, 'theory', 3, 'active'),
+(4, 4, 2, 1, '2026-2027', 5, 'tutorial', 3, 'active');
 
 -- --------------------------------------------------------
 
@@ -774,6 +856,7 @@ CREATE TABLE `students` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `admission_number` varchar(50) NOT NULL,
+  `registration_no` varchar(50) DEFAULT NULL,
   `roll_number` varchar(50) DEFAULT NULL,
   `first_name` varchar(100) NOT NULL,
   `middle_name` varchar(100) DEFAULT NULL,
@@ -785,6 +868,7 @@ CREATE TABLE `students` (
   `religion` varchar(100) DEFAULT NULL,
   `caste_category` varchar(100) DEFAULT NULL,
   `aadhaar_number` varchar(20) DEFAULT NULL,
+  `identification_mark` text DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `personal_email` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
@@ -821,19 +905,21 @@ CREATE TABLE `students` (
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `user_id`, `admission_number`, `roll_number`, `first_name`, `middle_name`, `last_name`, `date_of_birth`, `gender`, `blood_group`, `nationality`, `religion`, `caste_category`, `aadhaar_number`, `email`, `personal_email`, `phone`, `alternate_phone`, `permanent_address`, `current_address`, `city`, `state`, `pincode`, `country`, `program_id`, `batch_id`, `admission_date`, `admission_type`, `admission_category`, `current_semester`, `father_name`, `father_email`, `father_phone`, `mother_name`, `mother_phone`, `mother_email`, `guardian_name`, `guardian_relation`, `guardian_phone`, `guardian_email`, `status`, `created_by`, `created_at`, `updated_at`) VALUES
-(1, 6, 'ADM2024001', 'CSE24001', 'Aarav', 'K', 'Mehta', '2005-06-15', 'male', NULL, 'Indian', NULL, NULL, NULL, 'aarav.mehta@nitdelhi.ac.in', NULL, '9810012345', NULL, '12, Green Park, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 1, '2024-08-10', 'regular', 'general', 2, 'Rajesh Mehta', 'rajesh.mehta@example.com', '9810011111', 'Sunita Mehta', '9810022222', 'sunita.mehta@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(2, 7, 'ADM2024002', 'CSE24002', 'Vihaan', 'S', 'Khanna', '2005-09-20', 'male', NULL, 'Indian', NULL, NULL, NULL, 'vihaan.khanna@nitdelhi.ac.in', NULL, '9810012346', NULL, '34, Model Town, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 1, '2024-08-10', 'regular', 'general', 2, 'Sanjay Khanna', 'sanjay.khanna@example.com', '9810033333', 'Anita Khanna', '9810044444', 'anita.khanna@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(3, 8, 'ADM2024003', 'CSE24003', 'Vivaan', 'R', 'Saxena', '2005-11-02', 'male', NULL, 'Indian', NULL, NULL, NULL, 'vivaan.saxena@nitdelhi.ac.in', NULL, '9810012347', NULL, '56, Patel Nagar, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 1, '2024-08-10', 'regular', 'general', 2, 'Rakesh Saxena', 'rakesh.saxena@example.com', '9810055555', 'Poonam Saxena', '9810066666', 'poonam.saxena@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(4, 9, 'ADM2024004', 'ECE24001', 'Ananya', 'P', 'Singh', '2005-04-18', 'female', NULL, 'Indian', NULL, NULL, NULL, 'ananya.singh@nitdelhi.ac.in', NULL, '9810012348', NULL, '78, Vikaspuri, Delhi', NULL, NULL, NULL, NULL, 'India', 2, 2, '2024-08-10', 'regular', 'general', 2, 'Arun Singh', 'arun.singh@example.com', '9810077777', 'Meena Singh', '9810088888', 'meena.singh@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(5, 10, 'ADM2024005', 'ECE24002', 'Diya', 'M', 'Patel', '2005-07-25', 'female', NULL, 'Indian', NULL, NULL, NULL, 'diya.patel@nitdelhi.ac.in', NULL, '9810012349', NULL, '90, Janakpuri, Delhi', NULL, NULL, NULL, NULL, 'India', 2, 2, '2024-08-10', 'regular', 'general', 2, 'Mahesh Patel', 'mahesh.patel@example.com', '9810099999', 'Geeta Patel', '9810000001', 'geeta.patel@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(6, 11, 'ADM2024006', 'ECE24003', 'Advik', 'N', 'Joshi', '2005-12-12', 'male', NULL, 'Indian', NULL, NULL, NULL, 'advik.joshi@nitdelhi.ac.in', NULL, '9810012350', NULL, '23, Rohini, Delhi', NULL, NULL, NULL, NULL, 'India', 2, 2, '2024-08-10', 'regular', 'general', 2, 'Nitin Joshi', 'nitin.joshi@example.com', '9810000111', 'Sangeeta Joshi', '9810000222', 'sangeeta.joshi@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(8, 13, 'ADM2024008', 'ME24002', 'Arjun', 'V', 'Nair', '2004-08-19', 'male', NULL, 'Indian', NULL, NULL, NULL, 'arjun.nair@nitdelhi.ac.in', NULL, '9810012352', NULL, '67, Noida', NULL, NULL, NULL, NULL, 'India', 3, 3, '2024-08-10', 'regular', 'general', 3, 'Vijay Nair', 'vijay.nair@example.com', '9810000555', 'Radha Nair', '9810000666', 'radha.nair@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(9, 14, 'ADM2024009', 'ME24003', 'Ishita', 'D', 'Desai', '2004-10-10', 'female', NULL, 'Indian', NULL, NULL, NULL, 'ishita.desai@nitdelhi.ac.in', NULL, '9810012353', NULL, '89, Ghaziabad', NULL, NULL, NULL, NULL, 'India', 3, 3, '2024-08-10', 'regular', 'general', 3, 'Dinesh Desai', 'dinesh.desai@example.com', '9810000777', 'Minal Desai', '9810000888', 'minal.desai@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(10, 15, 'ADM2024010', 'CSE25001', 'Rohan', 'K', 'Das', '2006-01-05', 'male', NULL, 'Indian', NULL, NULL, NULL, 'rohan.das@nitdelhi.ac.in', NULL, '9810012354', NULL, '12, Salt Lake, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 4, '2025-08-10', 'regular', 'general', 1, 'Kalyan Das', 'kalyan.das@example.com', '9810000999', 'Nandini Das', '9810001000', 'nandini.das@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(11, 16, 'ADM2024011', 'CSE25002', 'Kavya', 'R', 'Menon', '2006-02-14', 'female', NULL, 'Indian', NULL, NULL, NULL, 'kavya.menon@nitdelhi.ac.in', NULL, '9810012355', NULL, '34, Andheri, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 4, '2025-08-10', 'regular', 'general', 1, 'Ramesh Menon', 'ramesh.menon@example.com', '9810001111', 'Shobha Menon', '9810001222', 'shobha.menon@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(12, 17, 'ADM2024012', 'CSE25003', 'Reyansh', 'G', 'Gupta', '2006-03-22', 'male', NULL, 'Indian', NULL, NULL, NULL, 'reyansh.gupta@nitdelhi.ac.in', NULL, '9810012356', NULL, '56, Connaught Place, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 4, '2025-08-10', 'regular', 'general', 1, 'Gaurav Gupta', 'gaurav.gupta@example.com', '9810001333', 'Anjali Gupta', '9810001444', 'anjali.gupta@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
-(13, 19, 'ADM20265479', NULL, 'Sayantan Bharati', '', 'Bharati', '2026-03-31', 'male', '', 'Indian', NULL, NULL, NULL, NULL, 'abcs@domain.com', '+911234125125', '', 'asdf', 'asdfas', 'dfasdf', 'asdfa', 'sdfasdf', 'India', NULL, NULL, '2026-03-18', 'transfer', 'general', 1, '', NULL, '', '', '', NULL, '', '', '', NULL, 'active', NULL, '2026-03-18 12:07:03', '2026-03-18 12:18:53');
+INSERT INTO `students` (`id`, `user_id`, `admission_number`, `registration_no`, `roll_number`, `first_name`, `middle_name`, `last_name`, `date_of_birth`, `gender`, `blood_group`, `nationality`, `religion`, `caste_category`, `aadhaar_number`, `identification_mark`, `email`, `personal_email`, `phone`, `alternate_phone`, `permanent_address`, `current_address`, `city`, `state`, `pincode`, `country`, `program_id`, `batch_id`, `admission_date`, `admission_type`, `admission_category`, `current_semester`, `father_name`, `father_email`, `father_phone`, `mother_name`, `mother_phone`, `mother_email`, `guardian_name`, `guardian_relation`, `guardian_phone`, `guardian_email`, `status`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 6, 'ADM2024001', NULL, 'CSE24001', 'Aarav', 'K', 'Mehta', '2005-06-15', 'male', NULL, 'Indian', NULL, NULL, NULL, NULL, 'aarav.mehta@nitdelhi.ac.in', NULL, '9810012345', NULL, '12, Green Park, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 1, '2024-08-10', 'regular', 'general', 2, 'Rajesh Mehta', 'rajesh.mehta@example.com', '9810011111', 'Sunita Mehta', '9810022222', 'sunita.mehta@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(2, 7, 'ADM2024002', NULL, 'CSE24002', 'Vihaan', 'S', 'Khanna', '2005-09-20', 'male', NULL, 'Indian', NULL, NULL, NULL, NULL, 'vihaan.khanna@nitdelhi.ac.in', NULL, '9810012346', NULL, '34, Model Town, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 1, '2024-08-10', 'regular', 'general', 2, 'Sanjay Khanna', 'sanjay.khanna@example.com', '9810033333', 'Anita Khanna', '9810044444', 'anita.khanna@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(3, 8, 'ADM2024003', NULL, 'CSE24003', 'Vivaan', 'R', 'Saxena', '2005-11-02', 'male', NULL, 'Indian', NULL, NULL, NULL, NULL, 'vivaan.saxena@nitdelhi.ac.in', NULL, '9810012347', NULL, '56, Patel Nagar, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 1, '2024-08-10', 'regular', 'general', 2, 'Rakesh Saxena', 'rakesh.saxena@example.com', '9810055555', 'Poonam Saxena', '9810066666', 'poonam.saxena@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(4, 9, 'ADM2024004', NULL, 'ECE24001', 'Ananya', 'P', 'Singh', '2005-04-18', 'female', NULL, 'Indian', NULL, NULL, NULL, NULL, 'ananya.singh@nitdelhi.ac.in', NULL, '9810012348', NULL, '78, Vikaspuri, Delhi', NULL, NULL, NULL, NULL, 'India', 2, 2, '2024-08-10', 'regular', 'general', 2, 'Arun Singh', 'arun.singh@example.com', '9810077777', 'Meena Singh', '9810088888', 'meena.singh@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(5, 10, 'ADM2024005', NULL, 'ECE24002', 'Diya', 'M', 'Patel', '2005-07-25', 'female', NULL, 'Indian', NULL, NULL, NULL, NULL, 'diya.patel@nitdelhi.ac.in', NULL, '9810012349', NULL, '90, Janakpuri, Delhi', NULL, NULL, NULL, NULL, 'India', 2, 2, '2024-08-10', 'regular', 'general', 2, 'Mahesh Patel', 'mahesh.patel@example.com', '9810099999', 'Geeta Patel', '9810000001', 'geeta.patel@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(6, 11, 'ADM2024006', NULL, 'ECE24003', 'Advik', 'N', 'Joshi', '2005-12-12', 'male', NULL, 'Indian', NULL, NULL, NULL, NULL, 'advik.joshi@nitdelhi.ac.in', NULL, '9810012350', NULL, '23, Rohini, Delhi', NULL, NULL, NULL, NULL, 'India', 2, 2, '2024-08-10', 'regular', 'general', 2, 'Nitin Joshi', 'nitin.joshi@example.com', '9810000111', 'Sangeeta Joshi', '9810000222', 'sangeeta.joshi@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(8, 13, 'ADM2024008', NULL, 'ME24002', 'Arjun', 'V', 'Nair', '2004-08-19', 'male', NULL, 'Indian', NULL, NULL, NULL, NULL, 'arjun.nair@nitdelhi.ac.in', NULL, '9810012352', NULL, '67, Noida', NULL, NULL, NULL, NULL, 'India', 3, 3, '2024-08-10', 'regular', 'general', 3, 'Vijay Nair', 'vijay.nair@example.com', '9810000555', 'Radha Nair', '9810000666', 'radha.nair@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(9, 14, 'ADM2024009', NULL, 'ME24003', 'Ishita', 'D', 'Desai', '2004-10-10', 'female', NULL, 'Indian', NULL, NULL, NULL, NULL, 'ishita.desai@nitdelhi.ac.in', NULL, '9810012353', NULL, '89, Ghaziabad', NULL, NULL, NULL, NULL, 'India', 3, 3, '2024-08-10', 'regular', 'general', 3, 'Dinesh Desai', 'dinesh.desai@example.com', '9810000777', 'Minal Desai', '9810000888', 'minal.desai@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(10, 15, 'ADM2024010', NULL, 'CSE25001', 'Rohan', 'K', 'Das', '2006-01-05', 'male', NULL, 'Indian', NULL, NULL, NULL, NULL, 'rohan.das@nitdelhi.ac.in', NULL, '9810012354', NULL, '12, Salt Lake, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 4, '2025-08-10', 'regular', 'general', 1, 'Kalyan Das', 'kalyan.das@example.com', '9810000999', 'Nandini Das', '9810001000', 'nandini.das@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(11, 16, 'ADM2024011', NULL, 'CSE25002', 'Kavya', 'R', 'Menon', '2006-02-14', 'female', NULL, 'Indian', NULL, NULL, NULL, NULL, 'kavya.menon@nitdelhi.ac.in', NULL, '9810012355', NULL, '34, Andheri, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 4, '2025-08-10', 'regular', 'general', 1, 'Ramesh Menon', 'ramesh.menon@example.com', '9810001111', 'Shobha Menon', '9810001222', 'shobha.menon@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(12, 17, 'ADM2024012', NULL, 'CSE25003', 'Reyansh', 'G', 'Gupta', '2006-03-22', 'male', NULL, 'Indian', NULL, NULL, NULL, NULL, 'reyansh.gupta@nitdelhi.ac.in', NULL, '9810012356', NULL, '56, Connaught Place, Delhi', NULL, NULL, NULL, NULL, 'India', 1, 4, '2025-08-10', 'regular', 'general', 1, 'Gaurav Gupta', 'gaurav.gupta@example.com', '9810001333', 'Anjali Gupta', '9810001444', 'anjali.gupta@example.com', NULL, NULL, NULL, NULL, 'active', 1, '2026-03-18 10:43:07', '2026-03-18 10:43:07'),
+(13, 19, 'ADM20265479', NULL, NULL, 'Sayantan Bharati', '', 'Bharati', '2026-03-31', 'male', '', 'Indian', NULL, NULL, NULL, NULL, NULL, 'abcs@domain.com', '+911234125125', '', 'asdf', 'asdfas', 'dfasdf', 'asdfa', 'sdfasdf', 'India', NULL, NULL, '2026-03-18', 'transfer', 'general', 1, '', NULL, '', '', '', NULL, '', '', '', NULL, 'active', NULL, '2026-03-18 12:07:03', '2026-03-18 12:18:53'),
+(14, NULL, 'ADM20260001', 'REG2024101', NULL, 'Arjun', NULL, 'Mehta', '2005-06-15', 'male', 'O+', 'Indian', 'Hinduism', 'General', '123456789012', 'Mole on right cheek', NULL, NULL, '9876543210', NULL, '123, Rose Villa, MG Road, Mumbai', NULL, NULL, NULL, NULL, 'India', 1, 1, '2026-04-05', 'regular', 'general', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'active', NULL, '2026-04-05 15:44:42', '2026-04-05 15:44:42'),
+(15, NULL, 'ADM20260002', 'REG2024102', NULL, 'Sanya', NULL, 'Iyer', '2005-09-22', 'female', 'B+', 'Indian', 'Hinduism', 'OBC', '987654321098', 'Scar on left arm', NULL, NULL, '9876543211', NULL, '45, Skyline Apts, Adyar, Chennai', NULL, NULL, NULL, NULL, 'India', 1, 1, '2026-04-05', 'regular', 'general', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'active', NULL, '2026-04-05 15:44:42', '2026-04-05 15:44:42');
 
 -- --------------------------------------------------------
 
@@ -1099,6 +1185,13 @@ ALTER TABLE `fee_transactions`
   ADD UNIQUE KEY `receipt_number` (`receipt_number`);
 
 --
+-- Indexes for table `holidays`
+--
+ALTER TABLE `holidays`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `holiday_date` (`holiday_date`);
+
+--
 -- Indexes for table `institutes`
 --
 ALTER TABLE `institutes`
@@ -1127,6 +1220,12 @@ ALTER TABLE `staff`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indexes for table `staff_activities`
+--
+ALTER TABLE `staff_activities`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `staff_categories`
 --
 ALTER TABLE `staff_categories`
@@ -1145,6 +1244,13 @@ ALTER TABLE `staff_designations`
 --
 ALTER TABLE `staff_leave_balance`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `staff_salaries`
+--
+ALTER TABLE `staff_salaries`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `receipt_no` (`receipt_no`);
 
 --
 -- Indexes for table `staff_subject_allocations`
@@ -1213,13 +1319,13 @@ ALTER TABLE `academic_programs`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `branches`
@@ -1264,6 +1370,12 @@ ALTER TABLE `fee_transactions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
+-- AUTO_INCREMENT for table `holidays`
+--
+ALTER TABLE `holidays`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `institutes`
 --
 ALTER TABLE `institutes`
@@ -1288,6 +1400,12 @@ ALTER TABLE `staff`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `staff_activities`
+--
+ALTER TABLE `staff_activities`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `staff_categories`
 --
 ALTER TABLE `staff_categories`
@@ -1306,16 +1424,22 @@ ALTER TABLE `staff_leave_balance`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `staff_salaries`
+--
+ALTER TABLE `staff_salaries`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `staff_subject_allocations`
 --
 ALTER TABLE `staff_subject_allocations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `student_attendance_summary`
