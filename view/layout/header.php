@@ -28,7 +28,8 @@ $faculty_pages     = ['faculty','staff-add','staff-edit','staff-view','staff-cat
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentERP – <?php echo ucwords(str_replace('-', ' ', $current_page)); ?></title>
+    <title>OliveFlow - <?php echo ucwords(str_replace('-', ' ', $current_page)); ?></title>
+    <link rel="icon" href="assets/images/favicon.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="<?php echo $B; ?>/assets/css/custom.css?v=<?php echo time(); ?>">
@@ -44,7 +45,10 @@ $faculty_pages     = ['faculty','staff-add','staff-edit','staff-view','staff-cat
 
     <!-- Brand -->
     <a class="topbar-brand" href="<?php echo $B; ?>/index.php?page=dashboard">
-        <i class="bi bi-mortarboard-fill"></i> StudentERP
+        <div>
+            <img src="<?php echo $B; ?>/assets/images/favicon.png" alt="OliveFlow Logo" style="width:24px; margin-right:4px;">
+            <span class="d-none d-sm-inline">OliveFlow</span>
+        </div>
     </a>
 
     <!-- Top Nav Links with Hover Dropdowns -->
