@@ -317,10 +317,9 @@ PHP handles business logic:
 
 #### MySQL
 MySQL database stores:
-- **Attendance Records**: Class, date, student, status
-- **Leave Management**: Leave applications, approvals, dates
-- **Alert Thresholds**: Configurable attendance cutoffs
-- **Audit Logs**: All attendance modifications with user and timestamp
+- **Attendance Records**: Class, date, student, and status.
+- **Holidays**: Master list of non-working days affecting academic schedules.
+- **Referential Integrity**: Linking attendance to students, subjects, and batches.
 
 ---
 
@@ -342,18 +341,7 @@ MySQL database stores:
 | marked_by | int(11) | Reference to faculty/admin who marked it |
 | created_at | timestamp | Record creation time |
 
-#### Table 2: `student_attendance_summary`
-| Field | Type | Description |
-|---|---|---|
-| id | int(11) | Primary Key, Auto Increment |
-| student_id | int(11) | Reference to student |
-| batch_id | int(11) | Reference to academic batch |
-| subject_id | int(11) | Reference to subject |
-| semester | int(11) | Academic semester |
-| attendance_percentage | decimal(5,2) | Calculated attendance percentage |
-| created_at | timestamp | Record creation time |
-
-#### Table 3: `holidays`
+#### Table 2: `holidays`
 | Field | Type | Description |
 |---|---|---|
 | id | int(11) | Primary Key, Auto Increment |

@@ -302,9 +302,9 @@ Central analytics hub with:
 - Alert generation based on thresholds
 
 #### MySQL
-- New analytics tables for cached/aggregated metrics
-- View definitions for common analytics queries
-- Data warehousing schema for historical analysis
+- **Audit Logs**: Complete trail of user actions, data changes, and IP addresses.
+- **System Settings**: Global configuration parameters for the institution.
+- **Staff Tracking**: Detailed logs of faculty activities and leave management.
 
 ---
 
@@ -328,15 +328,31 @@ The Analytics & Reporting module aggregates data from across the system and trac
 | user_agent | varchar(255) | Browser/Device information |
 | created_at | timestamp | Timestamp of the action |
 
-#### Table 2: `student_attendance_summary` (Aggregated)
+#### Table 2: `staff_activities`
 | Field | Type | Description |
 |---|---|---|
-| id | int(11) | Primary Key |
-| student_id | int(11) | Reference to student |
-| total_classes | int(11) | Total classes held |
-| attended_classes | int(11) | Total classes attended |
-| attendance_percentage | decimal(5,2) | Calculated percentage |
-| last_updated | timestamp | Last aggregation timestamp |
+| id | int(11) | Primary Key, Auto Increment |
+| staff_id | int(11) | Reference to staff member |
+| activity_title | varchar(255) | Title of the activity |
+| activity_description | text | Description of the activity |
+| activity_date | date | Date of activity |
+| status | enum | 'pending', 'completed', 'cancelled' |
+
+#### Table 3: `staff_leave_balance`
+| Field | Type | Description |
+|---|---|---|
+| id | int(11) | Primary Key, Auto Increment |
+| staff_id | int(11) | Reference to staff member |
+| leave_year | year(4) | Year of leave record |
+| casual_leave | int(11) | Available casual leaves |
+| sick_leave | int(11) | Available sick leaves |
+
+#### Table 4: `system_settings`
+| Field | Type | Description |
+|---|---|---|
+| id | int(11) | Primary Key, Auto Increment |
+| setting_key | varchar(50) | Setting key (e.g., institution_name, current_academic_year) |
+| setting_value | text | Configuration value |
 
 ### 4.2 Flowchart
 

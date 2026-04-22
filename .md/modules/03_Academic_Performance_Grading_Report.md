@@ -310,7 +310,8 @@ MySQL stores:
 
 ### 4.1 Table Design
 
-#### Table 1: `student_grades`
+#### Table 1: `student_grades` (Primary Data Hub)
+*Note: The physical schema for this table is defined in **Module 01: Student Information Management** as part of the Student 360 profile. This module (Module 03) focuses on the processing and analytics of this data.*
 | Field | Type | Description |
 |---|---|---|
 | id | int(11) | Primary Key, Auto Increment |

@@ -284,10 +284,12 @@ Automated curriculum management with:
 - Schedule generation
 
 #### MySQL
-- **Programs**: Program name, duration, credits, learning outcomes
-- **Courses**: Course code, name, credits, learning objectives, syllabus
-- **Curriculum**: Program semester structure and course sequences
-- **Prerequisites**: Course dependency relationships
+- **Institutes/Branches/Departments**: Global organizational hierarchy and campus structure
+- **Staff/Faculty**: Master records for all teaching and administrative personnel
+- **Programs**: Academic degree programs with duration and credit requirements
+- **Batches**: Yearly student cohorts for specific programs
+- **Subjects**: Course definitions with learning outcomes and prerequisites
+- **Allocations/Schedules**: Mapping of faculty to subjects and generation of timetables
 
 ---
 
@@ -295,7 +297,72 @@ Automated curriculum management with:
 
 ### 4.1 Table Design
 
-#### Table 1: `academic_programs`
+#### Table 1: `institutes`
+| Field | Type | Description |
+|---|---|---|
+| id | int(11) | Primary Key, Auto Increment |
+| code | varchar(50) | Institute code |
+| name | varchar(255) | Name of the institute |
+| type_id | int(11) | Reference to institute type |
+| email | varchar(100) | Official email |
+| status | enum | Active/Inactive status |
+
+#### Table 2: `institute_types`
+| Field | Type | Description |
+|---|---|---|
+| id | int(11) | Primary Key, Auto Increment |
+| type_name | varchar(255) | Name of type (e.g., Engineering, Medical) |
+| description | text | Description of the type |
+| status | enum | Active/Inactive status |
+
+#### Table 3: `branches`
+| Field | Type | Description |
+|---|---|---|
+| id | int(11) | Primary Key, Auto Increment |
+| code | varchar(50) | Branch code |
+| name | varchar(255) | Name of the branch |
+| institute_id | int(11) | Reference to institute |
+| status | enum | Active/Inactive status |
+
+#### Table 4: `departments`
+| Field | Type | Description |
+|---|---|---|
+| id | int(11) | Primary Key, Auto Increment |
+| code | varchar(50) | Department code |
+| name | varchar(255) | Name of the department |
+| institute_id | int(11) | Reference to institute |
+| status | enum | Active/Inactive status |
+
+#### Table 5: `staff`
+| Field | Type | Description |
+|---|---|---|
+| id | int(11) | Primary Key, Auto Increment |
+| user_id | int(11) | Reference to user account (optional) |
+| staff_id | varchar(50) | Unique staff ID/Employee code |
+| first_name | varchar(100) | Staff's first name |
+| last_name | varchar(100) | Staff's last name |
+| email | varchar(100) | Institutional/Official email |
+| category_id | int(11) | Reference to staff category |
+| designation_id | int(11) | Reference to staff designation |
+| joining_date | date | Date of joining |
+| status | enum | 'active', 'inactive', etc. |
+
+#### Table 6: `staff_categories`
+| Field | Type | Description |
+|---|---|---|
+| id | int(11) | Primary Key, Auto Increment |
+| name | varchar(100) | Category name (e.g., Teaching) |
+| code | varchar(20) | Unique category code |
+
+#### Table 7: `staff_designations`
+| Field | Type | Description |
+|---|---|---|
+| id | int(11) | Primary Key, Auto Increment |
+| category_id | int(11) | Reference to staff category |
+| name | varchar(100) | Designation name (e.g., Professor) |
+| code | varchar(20) | Unique designation code |
+
+#### Table 8: `academic_programs`
 | Field | Type | Description |
 |---|---|---|
 | id | int(11) | Primary Key, Auto Increment |
@@ -316,7 +383,7 @@ Automated curriculum management with:
 | program_fee | decimal(10,2) | Base program fee |
 | status | enum | Active/Inactive status |
 
-#### Table 2: `academic_batches`
+#### Table 9: `academic_batches`
 | Field | Type | Description |
 |---|---|---|
 | id | int(11) | Primary Key, Auto Increment |
@@ -334,7 +401,7 @@ Automated curriculum management with:
 | admission_criteria | text | Criteria for admission |
 | status | enum | Batch status |
 
-#### Table 3: `subjects`
+#### Table 10: `subjects`
 | Field | Type | Description |
 |---|---|---|
 | id | int(11) | Primary Key, Auto Increment |
@@ -351,7 +418,7 @@ Automated curriculum management with:
 | learning_outcomes | text | Expected learning outcomes |
 | status | enum | Active/Inactive status |
 
-#### Table 4: `course_mappings`
+#### Table 11: `course_mappings`
 | Field | Type | Description |
 |---|---|---|
 | id | int(11) | Primary Key, Auto Increment |
@@ -363,7 +430,7 @@ Automated curriculum management with:
 | semester | int(11) | Semester number |
 | status | enum | Active/Inactive status |
 
-#### Table 5: `class_schedules`
+#### Table 12: `class_schedules`
 | Field | Type | Description |
 |---|---|---|
 | id | int(11) | Primary Key, Auto Increment |
@@ -376,7 +443,7 @@ Automated curriculum management with:
 | room_number | varchar(50) | Room or hall number |
 | status | enum | Active/Cancelled |
 
-#### Table 6: `staff_subject_allocations`
+#### Table 13: `staff_subject_allocations`
 | Field | Type | Description |
 |---|---|---|
 | id | int(11) | Primary Key, Auto Increment |

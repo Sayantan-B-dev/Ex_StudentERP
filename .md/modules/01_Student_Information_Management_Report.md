@@ -326,13 +326,10 @@ PHP 7.4.29 is the server-side language handling business logic:
 
 #### MySQL
 MySQL 8.0 database engine stores and manages all student information:
-- **Students Table**: Student ID, name, contact details, address, program, batch
-- **Enrollments Table**: Enrollment dates, course associations, academic program details
-- **Emergency Contacts Table**: Emergency contact persons and relationship information
-- **Documents Table**: Document types, submission dates, verification status
-- **Activity Logs Table**: Record of all data modifications with timestamps and user information
-- Referential integrity through foreign keys
-- Indexes on frequently searched columns for performance optimization
+- **Students Table**: Comprehensive master data including personal, contact, and admission profiles.
+- **Users Table**: Authentication and role-based access for the student portal.
+- **Attendance Summary Table**: Aggregated attendance metrics (percentage, total classes) for quick profile viewing.
+- **Grades Table**: Semester-wise academic performance and result records.
 
 ---
 
@@ -373,48 +370,26 @@ The Student Information Management module utilizes the following tables from the
 | status | enum | 'active', 'suspended' |
 | created_at | timestamp | Record creation time |
 
-#### Table 3: `institutes`
+#### Table 3: `student_attendance_summary`
 | Field | Type | Description |
 |---|---|---|
 | id | int(11) | Primary Key, Auto Increment |
-| code | varchar(50) | Institute code |
-| name | varchar(255) | Name of the institute |
-| type_id | int(11) | Reference to institute type |
-| email | varchar(100) | Official email |
-| status | enum | Active/Inactive status |
+| student_id | int(11) | Reference to student |
+| batch_id | int(11) | Reference to batch |
+| subject_id | int(11) | Reference to subject |
+| semester | int(11) | Semester number |
+| attendance_percentage | decimal(5,2) | Aggregated attendance percentage |
 
-#### Table 4: `institute_types`
+#### Table 4: `student_grades`
 | Field | Type | Description |
 |---|---|---|
 | id | int(11) | Primary Key, Auto Increment |
-| type_name | varchar(255) | Name of type (e.g., Engineering, Medical) |
-| description | text | Description of the type |
-| status | enum | Active/Inactive status |
-
-#### Table 5: `branches`
-| Field | Type | Description |
-|---|---|---|
-| id | int(11) | Primary Key, Auto Increment |
-| code | varchar(50) | Branch code |
-| name | varchar(255) | Name of the branch |
-| institute_id | int(11) | Reference to institute |
-| status | enum | Active/Inactive status |
-
-#### Table 6: `departments`
-| Field | Type | Description |
-|---|---|---|
-| id | int(11) | Primary Key, Auto Increment |
-| code | varchar(50) | Department code |
-| name | varchar(255) | Name of the department |
-| institute_id | int(11) | Reference to institute |
-| status | enum | Active/Inactive status |
-
-#### Table 7: `system_settings`
-| Field | Type | Description |
-|---|---|---|
-| id | int(11) | Primary Key, Auto Increment |
-| setting_key | varchar(50) | Setting key (e.g., institution_name) |
-| setting_value | text | Setting value |
+| student_id | int(11) | Reference to student |
+| subject_id | int(11) | Reference to subject |
+| marks_obtained | decimal(5,2) | Numerical marks |
+| grade | varchar(5) | Letter grade (A, B, etc.) |
+| grade_point | decimal(3,2) | GPA points |
+| is_semester | tinyint(1) | Flag for final semester result |
 
 ### 4.2 Flowchart
 

@@ -60,7 +60,7 @@ body {
 
 #sidebar-toggle-btn {
     background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.1);
     color: rgba(255,255,255,0.7);
     font-size: 1.1rem;
     cursor: pointer;
@@ -128,7 +128,7 @@ body {
     transform: translateY(-6px);
     transition: opacity .22s ease, transform .22s ease, visibility 0s .22s;
     z-index: 2000;
-    border: 1px solid #e8edf2;
+    border: 2px solid #c6cbcf;
 }
 
 .top-nav > li:hover .drop-menu,
@@ -356,7 +356,7 @@ body {
 /* ── FORM ── */
 .form-label { font-weight: 500; font-size: .875rem; color: #444; margin-bottom: 5px; }
 .form-control, .form-select {
-    border: 1px solid #dee2e6;
+    border: 1px solid #00000052;
     border-radius: 8px;
     font-size: .88rem;
     padding: 9px 13px;
