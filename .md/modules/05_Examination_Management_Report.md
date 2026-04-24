@@ -324,15 +324,36 @@ The Examination Management module primarily interacts with the following table f
 
 ### 4.2 Flowchart
 
-[Placeholder: Provide flowchart showing: administrator creates exam → system schedules with conflict check → allocates seats randomly → generates hall tickets → collects results → publishes results → handles revaluation requests.]
+```mermaid
+graph TD
+    A[Start: Exam Planning] --> B[Define Exam Type & Name]
+    B --> C[Select Academic Batch]
+    C --> D[Set Max & Passing Marks]
+    D --> E[Assign Exam Date & Time]
+    E --> F[Select Venue/Room]
+    F --> G[Publish Exam Schedule]
+    G --> H[End]
+```
 
 ### 4.3 Data Flow Diagram
 
-[Placeholder: Provide DFD showing data flow from exam registration through scheduling, seat allocation, hall ticket generation, result entry, publication, and revaluation.]
+```mermaid
+graph LR
+    Admin((Admin)) -- Exam Config --> P1[Schedule Creation]
+    P1 -- Details --> T1[(examinations Table)]
+    T1 -- Schedule --> P2[Reporting Process]
+    P2 -- Exam Notice --> Student((Student))
+    P2 -- Invigilation Sheet --> Faculty((Faculty))
+```
 
 ### 4.4 E-R Diagram
 
-[Placeholder: Provide ER diagram showing entities: Exams, Students, Venues, Seats, Results, Revaluations, and their relationships.]
+```mermaid
+erDiagram
+    EXAMINATIONS }|--|| ACADEMIC_BATCHES : "scheduled_for"
+    EXAMINATIONS }|--|| SUBJECTS : "covers"
+    EXAMINATIONS ||--o{ STUDENT_GRADES : "results_in"
+```
 
 ---
 

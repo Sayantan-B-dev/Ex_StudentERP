@@ -393,23 +393,43 @@ The Student Information Management module utilizes the following tables from the
 
 ### 4.2 Flowchart
 
-[Placeholder: Provide flowchart illustrating the student registration process, including data validation steps, database insertion, and confirmation notifications. The flowchart should show decision points for duplicate registration checks and error handling procedures.]
+```mermaid
+graph TD
+    A[Start: Admission/Registration] --> B{Valid Input?}
+    B -- No --> C[Display Validation Errors]
+    C --> A
+    B -- Yes --> D{User Account Exists?}
+    D -- No --> E[Create User Account]
+    E --> F[Link Student Profile]
+    D -- Yes --> F
+    F --> G{Roll Number Unique?}
+    G -- No --> H[Generate/Correct Roll No]
+    G -- Yes --> I[Insert Student Record]
+    H --> I
+    I --> J[Link to Batch & Program]
+    J --> K[Success Confirmation]
+    K --> L[End]
+```
 
 **Process Flow Description:**
-1. User initiates student registration
-2. System displays registration form with input fields
-3. User enters student information
-4. Client-side validation checks for required fields and format
-5. Form submission to server
-6. Server-side validation and sanitization
-7. Check for duplicate registration number
-8. Insert into database with referential integrity checks
-9. Send confirmation email
-10. Display success message to user
+1. Registrar initiates registration through the Admin Dashboard.
+2. System validates mandatory fields (Name, DOB, Gender, Address).
+3. If no User account exists, a linked account is created in the `users` table.
+4. Student profile is linked to an `academic_program` and `academic_batch`.
+5. Roll number uniqueness is verified against the database.
+6. Data is persisted in the `students` table and a success notification is issued.
 
 ### 4.3 Data Flow Diagram
 
-[Placeholder: Provide Data Flow Diagram (DFD) showing entity relationships including students, faculty, admin, and external systems. The diagram should depict data flow from data sources (admission forms) through processes (validation, storage) to destinations (reports, queries).]
+```mermaid
+graph LR
+    Admin((Registrar/Admin)) -- Form Data --> P1[Student Management Process]
+    P1 -- Auth Info --> T1[(users Table)]
+    P1 -- Profile Data --> T2[(students Table)]
+    T1 -- UserID --> P1
+    T2 -- Confirmation --> Admin
+    P1 -- Enrollment Status --> T3[(batches Table)]
+```
 
 **DFD Level 0 (Context Diagram):**
 - External Entity: Student
@@ -425,7 +445,14 @@ The Student Information Management module utilizes the following tables from the
 
 ### 4.4 E-R Diagram
 
-[Placeholder: Provide Entity-Relationship Diagram showing entities (Students, Emergency_Contacts, Enrollments, Documents, Users, Activity_Logs) and their relationships with cardinality notations (1:1, 1:N, M:N) and primary/foreign key associations.]
+```mermaid
+erDiagram
+    USERS ||--|| STUDENTS : "has account"
+    STUDENTS }|--|| ACADEMIC_PROGRAMS : "enrolled in"
+    STUDENTS }|--|| ACADEMIC_BATCHES : "belongs to"
+    STUDENTS ||--o{ STUDENT_GRADES : "earns"
+    STUDENTS ||--o{ STUDENT_ATTENDANCE_SUMMARY : "tracks"
+```
 
 **Entity Relationships:**
 - **Students** (1 to Many) **Emergency_Contacts**

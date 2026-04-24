@@ -334,15 +334,41 @@ MySQL stores:
 
 ### 4.2 Flowchart
 
-[Placeholder: Provide flowchart showing: faculty enters marks → system calculates grade based on scale → updates GPA → determines academic standing → generates transcript. Include decision points for revaluation and verification workflows.]
+```mermaid
+graph TD
+    A[Start: Exam Grading] --> B[Faculty Selects Exam & Batch]
+    B --> C[Fetch Student List]
+    C --> D[Enter Marks Obtained]
+    D --> E{Marks > Max Marks?}
+    E -- Yes --> F[Display Error]
+    F --> D
+    E -- No --> G[Calculate Grade & Grade Point]
+    G --> H[Submit Result]
+    H --> I[Update student_grades Table]
+    I --> J[Notify Students/Parents]
+    J --> K[End]
+```
 
 ### 4.3 Data Flow Diagram
 
-[Placeholder: Provide DFD showing flow from marks entry through grade calculation, GPA computation, academic standing determination, to transcript generation and reporting.]
+```mermaid
+graph LR
+    Faculty((Faculty)) -- Marks Entry --> P1[Grading Process]
+    P1 -- Records --> T1[(student_grades Table)]
+    T1 -- Result Data --> P2[Reporting Process]
+    P2 -- Performance Dashboard --> Student((Student))
+    P2 -- Transcripts --> Admin((Admin))
+```
 
 ### 4.4 E-R Diagram
 
-[Placeholder: Provide ER diagram showing: Students, Subjects, Marks, Grades, GPARecords, GradeScale, Semesters with relationships and cardinality notations.]
+```mermaid
+erDiagram
+    STUDENTS ||--o{ STUDENT_GRADES : "earns"
+    SUBJECTS ||--o{ STUDENT_GRADES : "graded_in"
+    EXAMINATIONS ||--o{ STUDENT_GRADES : "marks_for"
+    ACADEMIC_BATCHES ||--o{ STUDENT_GRADES : "cohort_results"
+```
 
 ---
 

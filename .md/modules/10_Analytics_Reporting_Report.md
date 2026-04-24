@@ -356,15 +356,39 @@ The Analytics & Reporting module aggregates data from across the system and trac
 
 ### 4.2 Flowchart
 
-[Placeholder: Provide flowchart showing: dashboard request → data query/cache → aggregation → visualization rendering → real-time updates with threshold checking for alerts.]
+```mermaid
+graph TD
+    A[Start: Analysis Request] --> B[System Fetches Aggregate Data]
+    B --> C[Calculate Key Performance Indicators]
+    C --> D[Generate Charts/Gauges]
+    D --> E{Export Requested?}
+    E -- Yes --> F[Generate PDF/CSV Report]
+    F --> G[Download File]
+    E -- No --> H[Display Interactive Dashboard]
+    G --> I[End]
+    H --> I
+```
 
 ### 4.3 Data Flow Diagram
 
-[Placeholder: Provide DFD showing: data sources (Students, Grades, Attendance, Fees) → aggregation layer → memory cache → visualization layer → export module.]
+```mermaid
+graph LR
+    System((ERP Modules)) -- Raw Data --> P1[Aggregation Engine]
+    P1 -- Metrics --> T1[(Aggregated Views/Cache)]
+    Admin((Admin)) -- Dashboard Request --> P2[Visualization Process]
+    T1 -- Stats --> P2
+    P2 -- Interactive Charts --> Admin
+```
 
 ### 4.4 E-R Diagram
 
-[Placeholder: Provide ER diagram showing entities: Dashboards, Widgets, Reports, MetricsCache, PerformanceAnalytics and their relationships. Also show connections to existing entities (Students, Grades, Attendance, Fees).]
+```mermaid
+erDiagram
+    AUDIT_LOGS ||--|| USERS : "tracks"
+    SYSTEM_SETTINGS ||--o{ ACADEMIC_BATCHES : "configures"
+    STAFF ||--o{ STAFF_ACTIVITIES : "performs"
+    STAFF ||--o{ STAFF_LEAVE_BALANCE : "has"
+```
 
 ---
 

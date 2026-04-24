@@ -336,15 +336,37 @@ The Library Management module utilizes the following table from the core databas
 
 ### 4.2 Flowchart
 
-[Placeholder: Provide flowchart showing: student requests to borrow book → system checks availability and borrowing limits → updates book status → sets due date → generates receipt. Also show return process with fine calculation and condition checking.]
+```mermaid
+graph TD
+    A[Start: Book Issue] --> B[Student Searches for Book]
+    B --> C{Book Available?}
+    C -- No --> D[Show Availability Date]
+    C -- Yes --> E[Librarian scans Student ID]
+    E --> F[Scans Book ISBN/Barcode]
+    F --> G[Record Transaction]
+    G --> H[Update library_books Table]
+    H --> I[End]
+```
 
 ### 4.3 Data Flow Diagram
 
-[Placeholder: Provide DFD showing data flow from book addition to catalog, borrowing process, return processing, fine calculation, and reservation fulfillment.]
+```mermaid
+graph LR
+    Librarian((Librarian)) -- Issue Data --> P1[Transaction Process]
+    P1 -- Entry --> T1[(library_books Table)]
+    Student((Student)) -- Search Query --> P2[Search Process]
+    P2 -- Book Info --> Student
+    T1 -- Stock Data --> P2
+```
 
 ### 4.4 E-R Diagram
 
-[Placeholder: Provide ER diagram showing entities: Books, BookCopies, Authors, Publishers, Members, Borrowing, Reservations, Fines and their relationships.]
+```mermaid
+erDiagram
+    LIBRARY_BOOKS }|--|| ACADEMIC_PROGRAMS : "relevant_for"
+    STUDENTS ||--o{ LIBRARY_BOOKS : "borrows"
+    LIBRARY_BOOKS ||--o{ COMMUNICATIONS : "overdue_notice"
+```
 
 ---
 

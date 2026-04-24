@@ -458,15 +458,41 @@ Automated curriculum management with:
 
 ### 4.2 Flowchart
 
-[Placeholder: Provide flowchart showing: administrator selects program → defines curriculum → adds courses to semesters → validates prerequisites → saves curriculum → generates timetable. Include decision points for conflicts and prerequisite validation.]
+```mermaid
+graph TD
+    A[Start: Academic Setup] --> B[Define Institute & Branches]
+    B --> C[Create Departments]
+    C --> D[Define Programs & Batches]
+    D --> E[Add Subjects & Syllabi]
+    E --> F[Map Courses to Semesters]
+    F --> G[Allocate Faculty to Subjects]
+    G --> H[Generate Timetables]
+    H --> I[End]
+```
 
 ### 4.3 Data Flow Diagram
 
-[Placeholder: Provide DFD showing flow from program setup through curriculum definition to course allocation and schedule generation.]
+```mermaid
+graph LR
+    Admin((Admin)) -- Hierarchy Data --> P1[Institutional Setup]
+    P1 -- Master Data --> T1[(institutes/branches/depts)]
+    Faculty((Faculty)) -- Prefs --> P2[Allocation Process]
+    P2 -- Mapping --> T2[(staff_subject_allocations)]
+    T1 -- Structure --> P3[Curriculum Management]
+    P3 -- Definitions --> T3[(programs/batches/subjects)]
+```
 
 ### 4.4 E-R Diagram
 
-[Placeholder: Provide ER diagram showing entities: Programs, Courses, Curriculum, Prerequisites, Faculty, Students, Schedules with relationships.]
+```mermaid
+erDiagram
+    INSTITUTES ||--o{ BRANCHES : "contains"
+    BRANCHES ||--o{ DEPARTMENTS : "houses"
+    DEPARTMENTS ||--o{ ACADEMIC_PROGRAMS : "offers"
+    ACADEMIC_PROGRAMS ||--o{ ACADEMIC_BATCHES : "has"
+    STAFF ||--o{ STAFF_SUBJECT_ALLOCATIONS : "assigned_to"
+    SUBJECTS ||--o{ STAFF_SUBJECT_ALLOCATIONS : "allocated"
+```
 
 ---
 

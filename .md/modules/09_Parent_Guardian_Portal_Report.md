@@ -338,15 +338,42 @@ The Parent & Guardian Portal primarily provides a filtered view of the core stud
 
 ### 4.2 Flowchart
 
-[Placeholder: Provide flowchart showing: parent login → authentication → view student dashboard → check grades/attendance → receive alerts → message faculty → logout with security checkpoints throughout.]
+```mermaid
+graph TD
+    A[Start: Parent Access] --> B[Parent Logins to Portal]
+    B --> C[Fetch Associated Student Data]
+    C --> D{Select View?}
+    D -- Performance --> E[Fetch student_grades]
+    D -- Attendance --> F[Fetch student_attendance_summary]
+    D -- Fees --> G[Fetch fee_transactions]
+    E --> H[Display Result Card]
+    F --> I[Display Attendance Gauge]
+    G --> J[Display Ledger/Receipts]
+    H --> K[End]
+    I --> K
+    J --> K
+```
 
 ### 4.3 Data Flow Diagram
 
-[Placeholder: Provide DFD showing data flow from parent login through data retrieval from main ERP, alert triggering, messaging workflow, and session management.]
+```mermaid
+graph LR
+    Parent((Parent)) -- Login Creds --> P1[Auth Process]
+    P1 -- Profile Request --> P2[Data Retrieval]
+    P2 -- Fetch --> T1[(students/grades/attendance)]
+    T1 -- Result Set --> P2
+    P2 -- Formatted Dashboard --> Parent
+```
 
 ### 4.4 E-R Diagram
 
-[Placeholder: Provide ER diagram showing entities: Parents, Students (read-only), Grades (read-only), Attendance (read-only), ParentMessages, ParentAlerts and their relationships.]
+```mermaid
+erDiagram
+    USERS ||--|| STUDENTS : "parent_account_of"
+    STUDENTS ||--o{ STUDENT_GRADES : "view_grades"
+    STUDENTS ||--o{ STUDENT_ATTENDANCE_SUMMARY : "view_attendance"
+    STUDENTS ||--o{ FEE_TRANSACTIONS : "view_fees"
+```
 
 ---
 

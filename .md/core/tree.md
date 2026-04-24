@@ -1,23 +1,6 @@
 ```txt
 .
 ├── .gitignore
-├── .md.infra
-│   ├── Allocated_modules.md
-│   ├── Prompt_for_document.md
-│   ├── instruction.md
-│   └── latestchanges.md
-├── .md.module
-│   ├── 01_Student_Information_Management_Report.md
-│   ├── 02_Attendance_Tracking_Report.md
-│   ├── 03_Academic_Performance_Grading_Report.md
-│   ├── 04_Course_Curriculum_Management_Report.md
-│   ├── 05_Examination_Management_Report.md
-│   ├── 06_Fee_Financial_Management_Report.md
-│   ├── 07_Communication_Notifications_Report.md
-│   ├── 08_Library_Management_Report.md
-│   ├── 09_Parent_Guardian_Portal_Report.md
-│   ├── 10_Analytics_Reporting_Report.md
-│   └── db.md
 ├── README.md
 ├── assets
 │   ├── css

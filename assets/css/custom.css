@@ -275,7 +275,7 @@ body {
 
 /* ── CARDS ── */
 .card {
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.24);
     border-radius: var(--card-radius);
     box-shadow: 0 4px 20px rgba(0,0,0,.08);
     transition: transform .2s, box-shadow .2s;

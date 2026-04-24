@@ -334,15 +334,41 @@ The Communication & Notifications module utilizes the following table from the c
 
 ### 4.2 Flowchart
 
-[Placeholder: Provide flowchart showing: administrator creates announcement → selects recipients → chooses delivery channels → schedules delivery → system processes queue → sends via email/SMS → updates delivery status → tracks read status.]
+```mermaid
+graph TD
+    A[Start: Send Communication] --> B[Sender Selects Target Type]
+    B --> C{Target Type?}
+    C -- Batch --> D[Select Academic Batch]
+    C -- Individual --> E[Enter Student/Staff ID]
+    C -- Department --> F[Select Department]
+    D --> G[Compose Message/Notice]
+    E --> G
+    F --> G
+    G --> H[Select Medium: Email/SMS/Portal]
+    H --> I[Submit & Send]
+    I --> J[Log in communications Table]
+    J --> K[End]
+```
 
 ### 4.3 Data Flow Diagram
 
-[Placeholder: Provide DFD showing flow from announcement creation through recipient selection, delivery processing, and read status tracking with gateway integrations.]
+```mermaid
+graph LR
+    Sender((Sender/Admin)) -- Message Content --> P1[Messaging Process]
+    P1 -- Log --> T1[(communications Table)]
+    P1 -- Dispatch --> P2[Email/SMS Service]
+    P2 -- Notification --> Recipient((Recipient))
+    Recipient -- Acknowledgement --> P1
+```
 
 ### 4.4 E-R Diagram
 
-[Placeholder: Provide ER diagram showing entities: Announcements, Notifications, DeliveryLog, ReadStatus, NotificationTemplates, Users/Students with relationships.]
+```mermaid
+erDiagram
+    USERS ||--o{ COMMUNICATIONS : "sends"
+    STUDENTS ||--o{ COMMUNICATIONS : "receives"
+    ACADEMIC_BATCHES ||--o{ COMMUNICATIONS : "targeted_at"
+```
 
 ---
 

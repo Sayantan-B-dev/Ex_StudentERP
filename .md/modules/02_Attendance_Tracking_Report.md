@@ -353,15 +353,43 @@ MySQL database stores:
 
 ### 4.2 Flowchart
 
-[Placeholder: Provide flowchart illustrating the daily attendance marking process including: faculty login, class selection, student list display, marking attendance (present/absent/leave), validation, database storage, and confirmation. Include decision points for leave verification and alert generation.]
+```mermaid
+graph TD
+    A[Start: Daily Attendance Marking] --> B[Faculty Selects Batch & Subject]
+    B --> C[Fetch Student List]
+    C --> D[Mark Presence/Absence/Leave]
+    D --> E{Verify All Records?}
+    E -- No --> D
+    E -- Yes --> F[Submit Attendance Data]
+    F --> G[Update attendance Table]
+    G --> H[Recalculate Summary for Student Profile]
+    H --> I[Notify Parents of Absentees]
+    I --> J[End]
+```
 
 ### 4.3 Data Flow Diagram
 
-[Placeholder: Provide DFD showing flow from faculty initiating attendance marking through validation, database storage, to report generation and alert triggering. Show interactions with student information, leave management, and notification systems.]
+```mermaid
+graph LR
+    Faculty((Faculty)) -- Attendance Data --> P1[Marking Process]
+    P1 -- Entry --> T1[(attendance Table)]
+    T1 -- Records --> P2[Reporting Process]
+    P2 -- Reports --> Faculty
+    P2 -- Notifications --> Parents((Parents))
+    T1 -- Raw Data --> P3[Summary Aggregation]
+    P3 -- Update --> T2[(student_attendance_summary)]
+```
 
 ### 4.4 E-R Diagram
 
-[Placeholder: Provide ER diagram showing entities: Students, Classes, Subjects, Faculty, Attendance, LeaveApplications, Users, AttendanceSettings, and their relationships with proper cardinality notations.]
+```mermaid
+erDiagram
+    STUDENTS ||--o{ ATTENDANCE : "marked"
+    SUBJECTS ||--o{ ATTENDANCE : "for"
+    ACADEMIC_BATCHES ||--o{ ATTENDANCE : "associated_with"
+    HOLIDAYS ||--o{ ATTENDANCE : "cancels"
+    STUDENTS ||--o{ STUDENT_ATTENDANCE_SUMMARY : "summarized_in"
+```
 
 ---
 

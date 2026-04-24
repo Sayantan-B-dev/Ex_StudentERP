@@ -340,15 +340,42 @@ The Fee & Financial Management module utilizes the following tables from the cor
 
 ### 4.2 Flowchart
 
-[Placeholder: Provide flowchart showing: fee structure setup → student fee assignment → payment processing → receipt generation → payment reconciliation → financial reporting with decision points for status verification and reminder triggering.]
+```mermaid
+graph TD
+    A[Start: Fee Payment] --> B[Student/Admin Selects Student ID]
+    B --> C[Fetch Pending Dues]
+    C --> D[Select Payment Method]
+    D --> E[Enter Payment Amount]
+    E --> F[Process Transaction]
+    F --> G{Payment Successful?}
+    G -- No --> H[Show Failure & Retry]
+    H --> D
+    G -- Yes --> I[Update fee_transactions Table]
+    I --> J[Generate Digital Receipt]
+    J --> K[End]
+```
 
 ### 4.3 Data Flow Diagram
 
-[Placeholder: Provide DFD showing data flow from fee structure definition through student fee assignment, payment collection, receipt generation, and financial reporting.]
+```mermaid
+graph LR
+    Student((Student)) -- Payment Data --> P1[Transaction Process]
+    P1 -- Entry --> T1[(fee_transactions Table)]
+    T1 -- Receipt Data --> P2[Receipt Generation]
+    P2 -- Digital Receipt --> Student
+    P1 -- Salary Data --> T2[(staff_salaries Table)]
+    Admin((Admin)) -- Payroll Request --> P3[Payroll Process]
+    P3 -- Disbursement --> T2
+```
 
 ### 4.4 E-R Diagram
 
-[Placeholder: Provide ER diagram showing entities: FeeStructure, StudentFees, Payments, Receipts, FinancialRecords, Students, and their relationships.]
+```mermaid
+erDiagram
+    STUDENTS ||--o{ FEE_TRANSACTIONS : "pays"
+    STAFF ||--o{ STAFF_SALARIES : "receives"
+    ACADEMIC_BATCHES ||--o{ FEE_TRANSACTIONS : "fee_structure_for"
+```
 
 ---
 
