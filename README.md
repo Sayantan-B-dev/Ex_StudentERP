@@ -64,11 +64,22 @@ Ensure you have **XAMPP** installed and both **Apache** and **MySQL** are runnin
 4. Click the **Import** tab at the top.
 5. Click **Go** to run the import. This sets up all 20+ tables along with sample/dummy data.
 
-### Step 3 — Visit the Application
-Once the database is imported, you can access the project:
+### Step 3 — Configure Environment Variables
+1. In the root directory, you will find a file named **`.env.example`**.
+2. Create a copy of this file and rename it to **`.env`**.
+3. Open **`.env`** and update the database credentials if they differ from the defaults:
+   ```env
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASS=your_password
+   DB_NAME=college_db
+   ```
+
+### Step 4 — Visit the Application
+Once the database is imported and the `.env` is configured, you can access the project:
 **URL:** `http://localhost/Ex_StudentERP`
 
-### Step 4 — Default Login Credentials
+### Step 5 — Default Login Credentials
 Use the following credentials to access the Admin Dashboard:
 - **Email:** `abc@domain.com`
 - **Password:** `123456`
