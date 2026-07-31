@@ -51,6 +51,7 @@
             letter-spacing:.5px; transition:opacity .2s, transform .1s;
         }
         .btn-login:hover { opacity:.9; transform:translateY(-1px); color:#fff; }
+        .btn-outline-olive:hover { background:var(--olive); color:#fff !important; transform:translateY(-1px); }
         .demo-hint { background:#f9f9f9; border-radius:10px; padding:1rem; font-size:.82rem; }
         .demo-hint code { background:#e9ecef; padding:2px 6px; border-radius:4px; }
         .footer-info {
@@ -95,6 +96,10 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-login mb-3"><i class="bi bi-box-arrow-in-right me-2"></i>Sign In</button>
+            <div class="divider-guests d-flex align-items-center gap-2 mb-3">
+                <hr class="flex-grow-1" style="border-color:#e0e0e0;margin:0"><span class="small text-muted">or</span><hr class="flex-grow-1" style="border-color:#e0e0e0;margin:0">
+            </div>
+            <a href="<?php echo defined('BASE_URL') ? BASE_URL : ''; ?>/controller/AuthController.php?action=guest" class="btn btn-outline-olive w-100 mb-3" style="border:2px solid var(--olive);color:var(--olive);font-weight:700;border-radius:10px;padding:.75rem;transition:opacity .2s, transform .1s;"><i class="bi bi-person-badge me-2"></i>Explore As a Guest Admin</a>
             <div class="text-center small">
                 Don't have an account? <a href="view/auth/register.php" class="text-olive fw-bold text-decoration-none">Register Now</a>
             </div>

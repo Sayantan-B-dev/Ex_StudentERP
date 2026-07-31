@@ -34,7 +34,7 @@ $faculty_pages     = ['faculty','staff-add','staff-edit','staff-view','staff-cat
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="<?php echo $B; ?>/assets/css/custom.css?v=<?php echo time(); ?>">
 </head>
-<body>
+<body<?php echo !empty($_SESSION['is_guest']) ? ' data-guest="1"' : ''; ?>>
 
 <!-- ── TOP NAVBAR ── -->
 <nav class="topbar">
@@ -133,6 +133,11 @@ $faculty_pages     = ['faculty','staff-add','staff-edit','staff-view','staff-cat
 
     <!-- Right side -->
     <div class="topbar-right">
+        <?php if (!empty($_SESSION['is_guest'])): ?>
+        <span class="badge bg-warning text-dark me-2 d-none d-sm-inline-flex align-items-center gap-1 px-2 py-1" style="font-size:.72rem;border-radius:20px;" title="Read-only demo session">
+            <i class="bi bi-eye"></i> Guest Mode – Read Only
+        </span>
+        <?php endif; ?>
         <!-- User dropdown -->
         <div class="dropdown">
             <a class="topbar-user dropdown-toggle" href="#" data-bs-toggle="dropdown" id="userMenu">

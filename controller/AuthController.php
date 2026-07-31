@@ -6,10 +6,20 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 if ($action === 'logout') {
     $pdo = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";charset=utf8mb4", DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    logActivity($pdo, 'User Logout', 'Auth');
+    if (empty($_SESSION['is_guest'])) logActivity($pdo, 'User Logout', 'Auth');
     session_unset();
     session_destroy();
     header('Location: ' . BASE_URL . '/index.php');
+    exit;
+}
+// ── GUEST MODE: read-only demo access ──────────────────────────────────────
+if ($action === 'guest') {
+    $_SESSION['user_id']    = -1;
+    $_SESSION['user_name']  = 'Guest Admin';
+    $_SESSION['user_role']  = 'admin';
+    $_SESSION['user_email'] = 'guest@demo.invalid';
+    $_SESSION['is_guest']   = true;
+    header('Location: ' . BASE_URL . '/index.php?page=dashboard');
     exit;
 }
 if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {

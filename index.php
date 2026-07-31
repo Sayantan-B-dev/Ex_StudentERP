@@ -5,6 +5,8 @@ require_once 'config/config.php';
 
 if (isset($_SESSION['user_id'])) {
 
+    $is_guest = !empty($_SESSION['is_guest']);
+
     $page = isset($_GET['page']) ? trim($_GET['page']) : 'dashboard';
 
     $allowed_pages = [
@@ -51,6 +53,20 @@ if (isset($_SESSION['user_id'])) {
     if (in_array($page, $admin_only) && $role !== 'admin') {
         $_SESSION['flash'] = 'Restricted access: Admins only.';
         $page = 'dashboard';
+    }
+
+    // ── GUEST MODE: read-only enforcement ──────────────────────────────────
+    if ($is_guest) {
+        // Guests cannot view audit logs
+        if ($page === 'logs') {
+            $_SESSION['flash'] = 'Audit logs are not available in guest mode.';
+            header('Location: '.BASE_URL.'/index.php?page=dashboard'); exit;
+        }
+        // Block every write operation (POST forms + inline deletes)
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' || (isset($_GET['action']) && $_GET['action'] === 'delete')) {
+            $_SESSION['flash_error'] = 'Read-only guest mode: this action is disabled.';
+            header('Location: '.BASE_URL.'/index.php?page='.$page); exit;
+        }
     }
 
     if (isset($_GET['action']) && $_GET['action'] === 'delete') {

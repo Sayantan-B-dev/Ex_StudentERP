@@ -1,6 +1,13 @@
 <?php
 // controller/StudentController.php
 require_once __DIR__ . '/../config/config.php';
+
+// GUEST MODE: read-only enforcement (before any DB work)
+if (!empty($_SESSION['is_guest'])) {
+    $_SESSION['flash_error'] = 'Read-only guest mode: this action is disabled.';
+    header('Location: '.BASE_URL.'/index.php?page=student-information'); exit;
+}
+
 $pdo = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";charset=utf8mb4", DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
 $action = $_GET['action'] ?? '';

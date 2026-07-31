@@ -11,6 +11,11 @@ $u = $pdo->prepare("SELECT * FROM users WHERE id=?");
 $u->execute([$user_id]);
 $user = $u->fetch(PDO::FETCH_ASSOC);
 
+// GUEST MODE: no DB row exists for guest (-1); render placeholder data
+if (empty($_SESSION['is_guest']) === false && !$user) {
+    $user = ['id'=>-1, 'name'=>'Guest Admin', 'email'=>'guest@demo.invalid', 'status'=>'active', 'created_at'=>date('Y-m-d H:i:s')];
+}
+
 // Fetch extended info
 $ext = [];
 if ($role === 'student') {

@@ -94,7 +94,7 @@ function inPageGroup(array $pages, string $current): bool {
             <div class="sidebar-section">System</div>
             <ul class="sidebar-nav">
                 <li class="<?php echo isActive('profile', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=profile"><i class="bi bi-person-circle"></i> My Profile</a></li>
-                <?php if ($role === 'admin'): ?>
+                <?php if ($role === 'admin' && empty($_SESSION['is_guest'])): ?>
                 <li class="<?php echo isActive('logs', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=logs"><i class="bi bi-shield-lock"></i> Audit Logs</a></li>
                 <li class="<?php echo isActive('settings', $current_page); ?>"><a href="<?php echo $B; ?>/index.php?page=settings"><i class="bi bi-gear"></i> Settings</a></li>
                 <?php endif; ?>
