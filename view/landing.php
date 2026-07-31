@@ -13,8 +13,9 @@
         body {
             min-height:100vh;
             background: linear-gradient(135deg, #1a2a1a 0%, #2c4a2c 40%, #4a3c31 100%);
-            display:flex; align-items:center; justify-content:center;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
             font-family:'Inter',system-ui,sans-serif;
+            padding:2rem 1rem;
         }
         .login-card {
             background:rgba(255,255,255,.96);
@@ -52,6 +53,19 @@
         .btn-login:hover { opacity:.9; transform:translateY(-1px); color:#fff; }
         .demo-hint { background:#f9f9f9; border-radius:10px; padding:1rem; font-size:.82rem; }
         .demo-hint code { background:#e9ecef; padding:2px 6px; border-radius:4px; }
+        .footer-info {
+            margin-top:24px; padding:1.1rem 1.5rem; text-align:center;
+            background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
+            border-radius:14px; color:rgba(255,255,255,.75); font-size:.82rem;
+        }
+        .footer-info .social-links { display:flex; justify-content:center; gap:14px; margin-top:10px; }
+        .footer-info .social-links a {
+            width:38px; height:38px; border-radius:50%;
+            display:inline-flex; align-items:center; justify-content:center;
+            color:#fff; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+            font-size:1rem; text-decoration:none; transition:transform .2s, background .2s;
+        }
+        .footer-info .social-links a:hover { transform:translateY(-3px); background:var(--olive); }
     </style>
 </head>
 <body>
@@ -86,6 +100,15 @@
             </div>
         </form>
 
+    </div>
+</div>
+<div class="footer-info" style="max-width:460px;width:100%">
+    <div class="small mb-1">Student ERP System &copy; 2026 &mdash; Developed by Sayantan Bharati</div>
+    <div class="small" style="opacity:.65">Built with PHP, MySQL &amp; Bootstrap</div>
+    <div class="social-links">
+        <a href="https://github.com/Sayantan-B-dev" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="GitHub"><i class="bi bi-github"></i></a>
+        <a href="https://www.linkedin.com/in/sayantanbharati/" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        <a href="https://www.instagram.com/sayantan_b_dev/" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
